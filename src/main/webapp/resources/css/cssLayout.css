@@ -1,0 +1,129 @@
+.noBorders>tbody>tr, .noBorders>tbody>tr>td {
+    background: none;
+    border: none;
+    vertical-align: top;
+}
+
+.fixedPosition {
+    position: fixed;
+    right: 10%;
+    top: 20%;
+}
+
+.box {
+    margin: 0px; 
+    padding: 10px;
+    border: 0px solid LightGray;
+    border-radius: 7px;
+    box-shadow: 0 0 7px 2px #888888; 
+    color: black;
+    /* text-align: left; */
+    /* width: 80%; */
+    /* background-color: #FFFFFF;  */
+}
+
+.boxf {
+    margin: 0px; 
+    padding: 10px;
+    border: 0px solid #000000;
+    color: black;
+    width: 80%;
+    margin: 0  auto;
+    /* background-color: #FFFFFF; */
+}
+
+.h1 {
+    font-size:  16px;
+    /* font-weight: bold; */
+    margin-bottom: 10px;
+    padding: 0px;
+    color: #086A87;
+    text-align: left;
+}
+
+.para {
+    margin-bottom: 10px;
+    padding: 0px;
+    text-align: left;
+}
+.menubar {
+    color: LightSlateGray;
+}
+
+.Logo
+{
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: bold;
+	vertical-align: middle;
+	left: 15px;
+	padding: 10px;
+	text-decoration: none;
+        background-image: url('../images/header-bg.png'); 
+        background-repeat: repeat;
+}
+
+.ui-datatable-data {
+	text-align: left;
+}
+
+#top {
+    position: relative;
+    color: black;
+    border: 1px;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
+#bottom {
+    position: relative;
+    background-color: #FFFFFF;
+    color: LightSlateGray;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+}
+
+#left {
+    float: left;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+#right {
+    float: right;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+.center_content {
+    position: relative;
+    background-color: #dddddd;
+    padding: 5px;
+}
+
+.left_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin: 0px 170px 0px 170px;
+}
+
+#top a:link, #top a:visited {
+  color: black;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+  color: lightslategrey;
+  font-weight : bold;
+  text-decoration : underline;
+}

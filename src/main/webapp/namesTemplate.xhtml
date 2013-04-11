@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="./resources/images/proteus.ico" />
+        <title>Proteus: Naming System</title>
+    </h:head>
+
+    <h:body>
+
+    <div id="full" class="boxf">
+        <div id="top" class="box">
+            <div class="Logo">Proteus: Naming System</div>
+            <div id="menu" class="menubar">
+               <ui:include src="menubar.xhtml"/>
+            </div>
+        </div>
+
+        <div id="content" class="box" align="center">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+
+        <div id="bottom" >
+            Copyright &copy; Facility for Rare Isotope Beam (FRIB), Michigan State University, 640 S. Shaw Lane, East Lansing, Michigan 48824-1321.
+        </div>
+
+     </div>
+    </h:body>
+
+</html>

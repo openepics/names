@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+    About the application
+
+    @author: Vasu V
+-->
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <p:overlayPanel id="aboutPanel"  for="aboutMenu"  showEffect="fade" hideEffect="fade" > 
+        <p:panelGrid>  
+            <f:facet name="header">  
+                <p:row>
+                    <p:column colspan="2">Proteus Naming System</p:column>
+                </p:row>   
+            </f:facet>  
+            <p:row>  
+                <p:column>Version</p:column>  
+                <p:column>2.0-beta</p:column>    
+            </p:row> 
+            <p:row>  
+                <p:column>Schema Version</p:column>  
+                <p:column>2.2</p:column>    
+            </p:row>
+            
+            <p:row>  
+                <p:column>Naming System</p:column>  
+                <p:column>Kelly Davidson, Sheng Peng, Eugene Tanke, Mathias Steiner</p:column>    
+            </p:row>
+            <p:row>  
+                <p:column>Design Team</p:column>  
+                <p:column>Vasu Vuppala</p:column>    
+            </p:row>
+            <p:row>  
+                <p:column>Development Team</p:column>  
+                <p:column>Vasu Vuppala</p:column>    
+            </p:row>
+        </p:panelGrid>
+    </p:overlayPanel>
+</ui:composition>

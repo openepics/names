@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+    Login dialog
+
+    @author: Vasu V
+-->
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <p:dialog id="loginDialog" widgetVar="loginWidget">                
+        <f:facet name="header">  
+            <h:outputText value="Login"/>  
+        </f:facet>                 
+        <p:panelGrid columns="2">
+            <h:outputLabel for="userid" value="Login:" />    
+            <p:inputText id="userid" value="#{userManager.inputUserID}" required="true" label="userid" />
+            <h:outputLabel for="passwd" value="Password:" />
+            <p:password id="passwd" value="#{userManager.inputPassword}"   label="password"/>          
+        </p:panelGrid>       
+        <p:watermark for="userid" value="Enter user id" />
+        <p:watermark for="passwd" value="Enter password" />
+        <p:commandButton id="ok" value="OK" update=":menuform:mainMenu :menuform:menumsgs" 
+                         action="#{userManager.onLogin}" style="float: left"
+                         oncomplete="loginWidget.hide()"  /> 
+        <p:commandButton id="cancel" value="Cancel" onclick="loginWidget.hide()" 
+                         type="button" style="float: right"/> 
+    </p:dialog>
+</ui:composition>

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                >
+
+    <ui:define name="content">
+        <h:form id="requestForm" rendered="#{userManager.editor}"> 
+            <p:panelGrid style="position:fixed" styleClass="noBorders"  rendered="false">
+                <p:row>
+                    <p:column>
+                        <p:commandButton icon="ui-icon-check" onclick="approveRequest.show()" title="Approve"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:commandButton icon="ui-icon-close" onclick="rejectRequest.show()" title="Reject"/>
+                    </p:column>
+                </p:row>       
+            </p:panelGrid>
+            <p:menu styleClass="fixedPosition box"  rendered="true">
+                <p:submenu label="Process Menu">                                          
+                    <p:menuitem value="Approve Request" icon="ui-icon-check" update=":ApproveForm" oncomplete="approveRequest.show()" title="Approve" />                                                         
+                    <p:menuitem value="Reject Request"  icon="ui-icon-close" update=":RejectForm" oncomplete="rejectRequest.show()" title="Reject" />                       
+                    <p:menuitem value="View History"    icon="ui-icon-search" update=":RejectForm" oncomplete="rejectRequest.show()" title="History"  disabled="true"/>  
+                </p:submenu>
+            </p:menu>
+            <p:contextMenu for="requestTable">
+                <p:menuitem value="Approve" icon="ui-icon-check"  onclick="approveRequest.show()" />
+                <p:menuitem value="Reject" icon="ui-icon-close"  onclick="rejectRequest.show()" />
+                <p:menuitem value="View History"    icon="ui-icon-search" update=":RejectForm" oncomplete="rejectRequest.show()" title="History"  disabled="true"/> 
+            </p:contextMenu>
+            <p:dataTable id="requestTable" var="nevent" value="#{eventManager.events}" 
+                         paginator="true" rows="50" resizableColumns="true"                                   
+                         rowKey="#{nevent.id}"                         
+                         emptyMessage="There are no pending requests."
+                         selection="#{eventManager.selectedEvents}" 
+                         filteredValue="#{eventManager.filteredEvents}"
+                         style="width: 90%">
+                <f:facet name="header">
+                    <h:outputText value="Requests to be Processesd" />                                       
+                </f:facet>
+
+                <p:column selectionMode="multiple" style="width: 4%" />
+
+                <p:column id="id" headerText="Id" sortBy="#{nevent.id}" style="width: 5%" >                  
+                    <h:outputText value="#{nevent.id}" />                              
+                </p:column>
+                <p:column id="nameCat" headerText="Category" filterBy="#{nevent.nameCategoryId.id}"
+                          filterMatchMode="contains" style="width: 10%" >                  
+                    <h:outputText value="#{nevent.nameCategoryId.id}" />                              
+                </p:column>
+                <p:column id="nameCode" headerText="Name" filterBy="#{nevent.nameCode}"
+                          filterMatchMode="startsWith" style="width: 7%" >                  
+                    <h:outputText value="#{nevent.nameCode}" />                              
+                </p:column>              
+                <p:column id="nameDesc" headerText="Description" filterBy="#{nevent.nameDescription}"
+                          filterMatchMode="contains" >                  
+                    <h:outputText value="#{nevent.nameDescription}" />                              
+                </p:column>
+                <p:column id="type" headerText="T"  filterBy="#{nevent.eventType}" 
+                          filterMatchMode="startsWith" style="width: 5%" >                  
+                    <h:outputText value="#{nevent.eventType}" />                              
+                </p:column>
+                <p:column id="reqBy" headerText="By" sortBy="#{nevent.requestedBy}"  style="width: 10%">                  
+                    <h:outputText value="#{nevent.requestedBy}" />                              
+                </p:column>
+                <p:column id="reqDate" headerText="Date" sortBy="#{nevent.requestDate}" style="width: 8%">                  
+                    <h:outputText value="#{nevent.requestDate}" >
+                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                    </h:outputText>
+                </p:column>            
+                <p:column id="reqComment" headerText="Comment" >                  
+                    <h:outputText value="#{nevent.requestorComment}" />                              
+                </p:column> 
+            </p:dataTable>
+
+            <p:growl id="requestMsgs" showDetail="true"/>   
+        </h:form>
+
+        <h:form id="ApproveForm" >
+            <p:dialog id="approveRequest"  widgetVar="approveRequest">                
+                <f:facet name="header">  
+                    <h:outputText value="Approve"/>  
+                </f:facet>
+                <p:panelGrid style="text-align: left" >
+                    <p:row>
+                        <p:column><h:outputLabel for="acomm" value="Approval Comments (optional):" /></p:column> 
+                        <p:column>
+                            <p:inputTextarea id="acomm" rows="5" cols="40" counter="counter" maxlength="254" 
+                                             value="#{eventManager.comments}"
+                                             counterTemplate="{0} characters remaining." autoResize="false"/>
+                            <br/>
+                            <h:outputText id="counter" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:separator />
+
+                <p:commandButton value="Approve" style="float: left"
+                                 update=":requestForm"                               
+                                 oncomplete="approveRequest.hide()"  
+                                 action="#{eventManager.onApprove()}"/> 
+                <p:commandButton  value="Cancel" style="float: right"
+                                  onclick="approveRequest.hide()"  />  
+            </p:dialog> 
+        </h:form>
+
+        <h:form id="RejectForm">
+            <p:dialog id="rejectRequest"  widgetVar="rejectRequest">                
+                <f:facet name="header">  
+                    <h:outputText value="Reject"/>  
+                </f:facet>
+                <p:panelGrid style="text-align: left" >
+                    <p:row>
+                        <p:column><h:outputLabel for="rcomm" value="Rejection Comments (optional):" /></p:column> 
+                        <p:column>
+                            <p:inputTextarea id="rcomm" rows="5" cols="40" counter="counter" maxlength="254" 
+                                             value="#{eventManager.comments}"
+                                             counterTemplate="{0} characters remaining." autoResize="false"/>
+                            <br/>
+                            <h:outputText id="counter" />
+                        </p:column>
+                    </p:row>                                       
+                </p:panelGrid>
+                <p:separator />
+                <p:commandButton  value="Reject" style="float: left"
+                                  update=":requestForm"                               
+                                  oncomplete="rejectRequest.hide()"  
+                                  action="#{eventManager.onReject()}"/> 
+                <p:commandButton  value="Cancel" style="float: right"
+                                  onclick="rejectRequest.hide()"  />  
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

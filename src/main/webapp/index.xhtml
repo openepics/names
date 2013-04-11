@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content">
+		<div class="h1"> From the FRIB Naming System Document 
+		(<h:outputLink value="https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T10500-PR-000001-R003.pdf" target="_blank">FRIB-T10500-PR-000001)</h:outputLink>:
+		</div>
+		
+		<div class="para">
+        Format and syntax of the name components shall be as shown in the figure below. 
+        Only the device name is required on drawings, name tags, etc. where the drawing or device name clearly 
+        indicates the system and subsystem including the equipment. 
+        However, where the system and/or subsystem are not apparent, the full name must be shown.
+        </div>
+		
+		<div align="center">
+                    <h:graphicImage value="resources/images/format.png" height="auto" width="auto"/>
+        </div>
+		
+        <p:panelGrid>  
+            <f:facet name="header">  
+                <p:row>
+                    <p:column colspan="4">Name Components</p:column>
+                </p:row> 
+                <p:row>  
+                    <p:column>Naming Part</p:column>  
+                    <p:column>Description</p:column>  
+                    <p:column>Requirements</p:column>  
+                    <p:column>Assigned By</p:column>  
+                </p:row>  
+            </f:facet>  
+			<p:row>  
+                <p:column>SSSS</p:column>  
+                <p:column>System</p:column>  
+                <p:column>Names in <h:outputLink value="system.xhtml">Table 3</h:outputLink>. System name is required. Up to 4 characters.</p:column>  
+                <p:column>Division Director</p:column>  
+            </p:row> 
+            <p:row>  
+                <p:column>BBBB</p:column>  
+                <p:column>Subsystem</p:column>  
+                <p:column>Names in <h:outputLink value="subsystem.xhtml">Table 4</h:outputLink>. 
+				   May be omitted if subsystem is obvious from system name or device name. 
+				   Up to 8 characters, but 4 is recommended.</p:column>  
+                <p:column>Division Director</p:column>  
+            </p:row>
+                       
+            <p:row>  
+                <p:column>DDDD</p:column>  
+                <p:column>Device Type</p:column>  
+                <p:column>Names in <h:outputLink value="devicetype.xhtml">Table 5</h:outputLink> 
+				   or IEEE 803 "Recommended Practice for Unique Identification in Power Plants and Related Facilities". 
+				   Device type is required. Up to 4 characters. Devices in grey italics are reserved.</p:column>  
+                <p:column>Control Account Manager</p:column>  
+            </p:row>
+			<p:row>  
+                <p:column>Q</p:column>  
+                <p:column>Qualifier</p:column>  
+                <p:column>Either "D" or "N" depending on the meaning of the following device instance number 
+				(for beam line components: "D" for distance along beamline; for others: 
+				"N" for sequential number). For each of the FRIB driver linac and ReA3, 
+				the RFQ input is set to have D=1000 (i.e. 100 m). All beam line components upstream from the 
+				RFQ input have D &lt; 1000, all downstream ones have D>1000. The fragment separator has D=1000 at 
+				the production target. For Dual systems at the same distance, "D+1" can be used added to the 
+				original distance.
+				</p:column>  
+                <p:column>Control Account Manager</p:column>  
+            </p:row>
+			<p:row>  
+                <p:column>IIII</p:column>  
+                <p:column>Device Instance</p:column>  
+                <p:column>Number as defined under Q (see above).  
+				    If Q="N", the device instance should also be a number.  
+					Alphabetic characters subject to Controls Dept. 
+					CAM approval. 4 characters mandatory.  </p:column>  
+                <p:column>Control Account Manager</p:column>  
+            </p:row>
+			<p:row>  
+                <p:column>TTTT</p:column>  
+                <p:column>Signal  Type</p:column>  
+                <p:column>Signal types are defined in <h:outputLink value="signaltype.xhtml">Table 6</h:outputLink>. 
+				   Up to 4 characters.</p:column>  
+                <p:column>Lead Engineer</p:column>  
+            </p:row>
+			<p:row>  
+                <p:column>XXXX</p:column>  
+                <p:column>Signal Domain </p:column>  
+                <p:column>Codes shown in <h:outputLink value="signaldomain.xhtml">Table 7</h:outputLink>. 
+				   Up to 4 characters.</p:column>  
+                <p:column>Lead Engineer</p:column>  
+            </p:row>
+			<p:row>  
+                <p:column>CCCC</p:column>  
+                <p:column>Additional Signal Description  </p:column>  
+                <p:column>Use is optional. Up to 4 characters</p:column>  
+                <p:column>Lead Engineer</p:column>  
+            </p:row>
+        </p:panelGrid>          
+    </ui:define>
+
+</ui:composition>

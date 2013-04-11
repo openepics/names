@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:form id="menuform">
+        <p:growl id="menumsgs" />
+        <ui:include src="about.xhtml" />
+        <ui:include src="login.xhtml" />
+        <p:menubar id="mainMenu">
+            <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
+            <p:menuitem value="All" icon="ui-icon-script" title="All Names" url="names.xhtml"/>               
+            <p:menuitem value="Systems" icon="ui-icon-carat-2-n-s" title="System Names" url="names.xhtml?category=system" />                              
+            <p:menuitem value="Subsystems" icon="ui-icon-carat-2-e-w" title="Subsystem Names" url="names.xhtml?category=subsystem" /> 
+            <p:menuitem value="Devices" icon="ui-icon-power" title="Device Type Names" url="names.xhtml?category=device-type" /> 
+
+            <p:submenu label="Signal" icon="ui-icon-document">
+                <p:menuitem value="Signal Types" title="Signal Type Names" url="names.xhtml?category=signal-type" />
+                <p:menuitem value="Signal Domains" title="Signal Domain Names" url="names.xhtml?category=signal-domain" />
+                <p:menuitem value="Signal Suffixes" title="Signal Suffix Names" url="names.xhtml?category=signal-suffix" />
+            </p:submenu>
+
+            <p:submenu label="Requests" icon="ui-icon-comment">
+                <p:menuitem value="Submit Requests" title="Submit a Change Requests" 
+                            url="request-sub.xhtml" icon="ui-icon-suitcase" 
+                            disabled="#{not userManager.loggedIn}" />            
+                <p:menuitem value="My Requests" title="Check status of your requests" 
+                            url="request-sub.xhtml?option=user" icon="ui-icon-comment" 
+                            disabled="#{not userManager.loggedIn}" />
+            </p:submenu>
+            
+            <p:menuitem value="Reports" title="Reports"  icon="ui-icon-print" url="reports.xhtml" disabled="false" />
+          
+            <p:submenu label="Admin" icon="ui-icon-note"  >
+                <p:menuitem value="Process Requests" title="Accept/Reject Requests" 
+                            url="request-proc.xhtml" icon="ui-icon-wrench" 
+                            disabled="#{not userManager.editor}" />                                       
+            </p:submenu>
+
+            <p:submenu label="Help" icon="ui-icon-help">
+                <p:menuitem value=" FRIB Naming System" title="FRIB Naming Document" 
+                            icon="ui-icon-document" target="_blank"
+                            url="https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T10500-PR-000001-R003.pdf" />
+                <p:menuitem value=" Report Problems" title="Report Problems/Suggestions" 
+                            icon="ui-icon-alert" target="_blank"
+                            url="https://controls.frib.msu.edu/controlshelp/" />
+                <p:menuitem value=" About" id="aboutMenu" icon="ui-icon-info" 
+                            title="About Proteus: Naming" />                          
+            </p:submenu>
+
+            <f:facet name="options">  
+                <h:outputText value="#{userManager.user}" style="margin-right:10px" rendered="#{userManager.loggedIn}" />  
+                <p:commandButton id="loginBtn" type="button" value="Login" 
+                                 icon="ui-icon-person" update=":menuform:loginDialog" 
+                                 onclick="loginWidget.show()" rendered="#{not userManager.loggedIn}" />
+                <p:commandButton id="logoutBtn" value="Logout" 
+                                 icon="ui-icon-person" update=":manageName:namesform:nameTable :menuform:mainMenu :menuform:menumsgs" 
+                                 action="#{userManager.onLogout}" 
+                                 rendered="#{userManager.loggedIn}" ajax="false"/> 
+            </f:facet>
+        </p:menubar>
+
+    </h:form>  
+</ui:composition>

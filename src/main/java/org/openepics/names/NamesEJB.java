@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * This software is Copyright by the Board of Trustees of Michigan
+ * State University (c) Copyright 2012.
+ * 
+ * You may use this software under the terms of the GNU public license
+ *  (GPL). The terms of this license are described at:
+ *       http://www.gnu.org/licenses/gpl.txt
+ * 
+ * Contact Information:
+ *   Facilitty for Rare Isotope Beam
+ *   Michigan State University
+ *   East Lansing, MI 48824-1321
+ *   http://frib.msu.edu
+ * 
  */
 package org.openepics.names;
 
@@ -12,11 +23,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
@@ -33,34 +41,27 @@ public class NamesEJB implements NamesEJBLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    @Inject
-    UserManager userManager;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
+    
+    @Inject
+    private UserManager userManager;
+    
     @PersistenceContext(unitName = "org.openepics.names.punit")
     private EntityManager em;
-    private AuthServ authService = null; //* Authentication service
-
-    /*
-    @Override
-    public NameEvent cancelEvent(int eventId, String user, String comment) {
-        NameEvent mEvent;
-        // ToDo; check if user is permitted to do this
-        mEvent = em.find(NameEvent.class, eventId, LockModeType.OPTIMISTIC);
-        mEvent.setStatus('c'); // cancelled
-        mEvent.setProcessDate(new java.util.Date());
-        mEvent.setProcessorComment(comment);
-        mEvent.setProcessedBy(user);
-        return mEvent;
-    }
-    */
     
+    private AuthServ authService = null; //* Authentication service
+   
     @Override
     public NameEvent createNewEvent(char eventType, String nameId, String category,
             String code, String description, String comment) throws Exception {
         logger.log(Level.INFO, "creating...");
         Date curdate = new Date();
 
-        if (!userManager.isLoggedIn()) {
+        if (userManager == null) {
+            throw new Exception("userManager is null. Cannot inject it");
+        }
+
+        if ( !userManager.isLoggedIn()) {
             throw new Exception("You are not authorized to perform this operation.");
         }
         //NameCategory ncat = new NameCategory(category, category,0);
@@ -84,14 +85,29 @@ public class NamesEJB implements NamesEJBLocal {
         logger.log(Level.INFO, "persisted...");
         return mEvent;
     }
+    
+    @Override
+    public NameRelease createNewRelease(NameRelease newRelease) throws Exception {
+        logger.log(Level.INFO, "creating release...");       
+
+        if (!userManager.isEditor()) {
+            throw new Exception("You are not authorized to perform this operation.");
+        }
+        newRelease.setReleaseDate(new Date());
+        // logger.log(Level.INFO, "set properties...");
+        em.persist(newRelease);
+        logger.log(Level.INFO, "published new release ...");
+        return newRelease;
+    }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getUnprocessedEvents() {
         List<NameEvent> nameEvents;
 
         TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.status = 'p'", NameEvent.class); // ToDo: convert to criteria query
         nameEvents = query.getResultList();
+        logger.log(Level.INFO, "retreived pending requests: " + nameEvents.size());
         return nameEvents;
     }
 
@@ -99,22 +115,30 @@ public class NamesEJB implements NamesEJBLocal {
      * Events that are approved, and are new ('i') or modified ('m').
      */
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
-    public List<NameEvent> getApprovedNames() {
+    public List<NameEvent> getValidNames() {       
+        return getStandardNames("%",false);
+    }
+    
+    /*
+     * Is name being changed?
+     */
+    @Override
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
+    public boolean isUnderChange(NameEvent nevent) {
         List<NameEvent> nameEvents;
 
-        TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.status = 'a'", NameEvent.class);
-
+        TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameId = :id AND n.status != 'r' AND  n.requestDate > (SELECT MAX(r.releaseDate) FROM NameRelease r)", NameEvent.class)
+                .setParameter("id", nevent.getNameId());
         nameEvents = query.getResultList();
-        logger.log(Level.INFO, "Results for requests: " + ":" + nameEvents.size());
-        return nameEvents;
+        logger.log(Level.INFO, "change requests: " + nameEvents.size());
+        return ! nameEvents.isEmpty();
     }
 
     /*
      * Events that are approved, and are new ('i') or modified ('m').
      */
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getUserRequests() {
         List<NameEvent> nameEvents;
         String user = userManager.getUser();
@@ -128,12 +152,12 @@ public class NamesEJB implements NamesEJBLocal {
                 .setParameter("user", user);
 
         nameEvents = query.getResultList();
-        logger.log(Level.INFO, "Results for requests: " + ":" + nameEvents.size());
+        logger.log(Level.INFO, "Results for requests: " + nameEvents.size());
         return nameEvents;
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getAllEvents() {
         List<NameEvent> nameEvents;
 
@@ -144,7 +168,18 @@ public class NamesEJB implements NamesEJBLocal {
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
+    public List<NameRelease> getAllReleases() {
+        List<NameRelease> releases;
+
+        TypedQuery<NameRelease> query = em.createQuery("SELECT n FROM NameRelease n ORDER BY n.releaseDate DESC", NameRelease.class); // ToDo: convert to criteria query.      
+        releases = query.getResultList();
+        logger.log(Level.INFO, "Results for all events: " + releases.size());
+        return releases;
+    }
+    
+    @Override
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> findEventsByName(String nameId) {
         List<NameEvent> nameEvents;
 
@@ -156,7 +191,23 @@ public class NamesEJB implements NamesEJBLocal {
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
+    public NameEvent findLatestEvent(String nameId) {
+        List<NameEvent> nameEvents;
+
+        TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameId = :nameid  AND n.status != 'r' ORDER BY n.requestDate DESC", NameEvent.class)
+                .setParameter("nameid", nameId); // ToDo: convert to criteria query.      
+        nameEvents = query.getResultList();     
+        // logger.log(Level.INFO, "Events for " + nameId + nameEvents.size());
+        if (nameEvents.isEmpty()) {
+            return null;
+        } else {
+            return nameEvents.get(0);
+        }
+    }
+    
+    @Override
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> findEvents(char eventType, char eventStatus) {
         List<NameEvent> nameEvents;
 
@@ -189,14 +240,19 @@ public class NamesEJB implements NamesEJBLocal {
      * Events that are approved, and are new ('i') or modified ('m').
      */
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED) // No transaction as it is read-only query
-    public List<NameEvent> getStandardNames(String category) {
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
+    public List<NameEvent> getStandardNames(String category, boolean includeDeleted) {
         List<NameEvent> nameEvents;
-
-        TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.status = 'a' AND n.eventType IN (?1, ?2) AND n.nameCategoryId.id LIKE ?3", NameEvent.class)
-                .setParameter(1, 'i')
-                .setParameter(2, 'm')
-                .setParameter(3, category); // ToDo: convert to criteria query.
+        TypedQuery<NameEvent> query;
+        
+        //TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.status = 'a' AND n.eventType IN (?1, ?2) AND n.nameCategoryId.id LIKE ?3 AND n.processDate <= (SELECT MAX(r.releaseDate) FROM NameRelease r) ORDER BY n.nameCategoryId.id, n.nameCode", NameEvent.class)
+        if (includeDeleted) {
+            query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameCategoryId.id LIKE :categ AND n.requestDate = (SELECT MAX(r.requestDate) FROM NameEvent r WHERE r.nameId = n.nameId AND (r.status = 'a' OR r.status = 'p')) ORDER BY n.nameCategoryId.id, n.nameCode", NameEvent.class)
+                    .setParameter("categ", category); // ToDo: convert to criteria query.
+        } else {
+            query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameCategoryId.id LIKE :categ AND n.requestDate = (SELECT MAX(r.requestDate) FROM NameEvent r WHERE r.nameId = n.nameId AND (r.status = 'a' OR r.status = 'p')) AND NOT (n.eventType = 'd' AND n.status = 'a') ORDER BY n.nameCategoryId.id, n.nameCode", NameEvent.class)
+                    .setParameter("categ", category); // ToDo: convert to criteria query.
+        }
         // ToDo: check category values
         nameEvents = query.getResultList();
         logger.log(Level.INFO, "Results for category " + category + ":" + nameEvents.size());
@@ -249,20 +305,9 @@ public class NamesEJB implements NamesEJBLocal {
         mEvent.setProcessedBy(userManager.getUser());
 
     }
-
-    /*
-     @Override
-     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)  // No transaction as it is read-only query
-     public List<NameEvent> getAllEvents() {
-     List<NameEvent> nameEvents;
-        
-     TypedQuery<NameEvent> query = em.createNamedQuery("NameEvent.findAll", NameEvent.class);
-     nameEvents = query.getResultList();
-     return nameEvents;
-     }
-     */
+    
     @Override
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    // TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public boolean isEditor(String user) {
         Privilege priv = em.find(Privilege.class, user);
 
@@ -289,6 +334,28 @@ public class NamesEJB implements NamesEJBLocal {
         resp = authService.validate(params);
 
         return resp.getStatus();
+    }
+    
+    @Override
+    public AuthResponse authenticate (String userid, String password) throws Exception {
+        AuthResponse response;
+        findAuthService();
+
+        if (authService == null) {
+            logger.log(Level.WARNING, "Cannot access Auth Service.");
+            return null; // ToDo: Use exceptions.
+        }
+        
+        // RequestContext context = RequestContext.getCurrentInstance(); 
+        // AuthServ auth = new AuthServ("http://qa01.hlc.nscl.msu.edu:8080/auth/rs/v0");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();        
+
+        params.add("user", userid);
+        params.add("password", password);
+        response = authService.authenticate(params);
+        password = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
+
+        return response;
     }
 
     private void findAuthService() throws Exception {
@@ -325,4 +392,5 @@ public class NamesEJB implements NamesEJBLocal {
 
         return properties;
     }
+    
 }

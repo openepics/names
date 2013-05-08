@@ -16,13 +16,28 @@
                          emptyMessage="No Names Found."
                          selection="#{namesManager.selectedName}" 
                          filteredValue="#{namesManager.filteredNames}"
+                         rowStyleClass="#{namesManager.nameStatus(stdname)}"
                          style="width: 90%">
                 <f:facet name="header">
-                    <h:outputText value="Standard Names" />                                       
+                    <h:outputText value="Names" />                       
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{namesManager.findHistory()}"   
                         update=":stdNameForm:historyTable" oncomplete="nameDetail.show()" />
 
+                <p:column id="nstatus"   style="width: 15%" 
+                          >                  
+                    <f:facet name="header">
+                        <h:outputText value="Status" /> 
+                        <br></br>
+                        
+                        <p:selectBooleanButton value="#{namesManager.showDeletedNames}" onLabel="Deleted" offLabel="Deleted" onIcon="ui-icon-check" offIcon="ui-icon-close">  
+                            <p:ajax update="nameTable"  listener="#{namesManager.refreshNames}"/> 
+                        </p:selectBooleanButton> 
+                        
+                    </f:facet>
+                    <h:outputText value="#{namesManager.nameStatus(stdname)}" />                                                                              
+                </p:column>
+                
                 <p:column id="nameCat" headerText="Category"  sortBy="#{stdname.nameCategoryId.id}"
                           filterBy="#{stdname.nameCategoryId.id}"
                           filterMatchMode="contains" 
@@ -32,7 +47,8 @@
                 <p:column id="nameCode" headerText="Code" sortBy="#{stdname.nameCode}"
                           filterBy="#{stdname.nameCode}"
                           filterMatchMode="startsWith" style="width: 15%" >                  
-                    <h:outputText value="#{stdname.nameCode}" />                              
+                    <h:outputText value="#{stdname.nameCode}" />
+                                    
                 </p:column>              
                 <p:column id="nameDesc" headerText="Description" 
                           filterBy="#{stdname.nameDescription}"
@@ -52,7 +68,7 @@
                              emptyMessage="There are no events for this name."                         
                              >
                    
-                    <p:column id="id" headerText="Id" >                  
+                    <p:column id="id" headerText="Id"  rendered="false" >                  
                         <h:outputText value="#{nevent.nameId}" />                              
                     </p:column>
                     <p:column id="nameCat" headerText="Category"   >                  
@@ -64,8 +80,8 @@
                     <p:column id="nameDesc" headerText="Description">                  
                         <h:outputText value="#{nevent.nameDescription}" />                              
                     </p:column>
-                    <p:column id="type" headerText="T" >                  
-                        <h:outputText value="#{nevent.eventType}" />                              
+                    <p:column id="type" headerText="Type" >                  
+                        <h:outputText value="#{requestManager.requestType(nevent.eventType) }" />                              
                     </p:column>
                     <p:column id="reqBy" headerText="By" sortBy="#{nevent.requestedBy}" >                  
                         <h:outputText value="#{nevent.requestedBy}" />                              
@@ -79,10 +95,10 @@
                         <h:outputText value="#{nevent.requestorComment}" />                              
                     </p:column>                     
 
-                    <p:column id="status" headerText="S"   style="width: 5%" >                  
-                        <h:outputText value="#{nevent.status}" title="status"/>                              
+                    <p:column id="status" headerText="Status"    >                  
+                        <h:outputText value="#{namesManager.nameStatus(nevent)}" title="status"/>                              
                     </p:column>
-                    <p:column id="By" headerText="Proc By"  style="width: 10%">                  
+                    <p:column id="By" headerText="Proc By"  >                  
                         <h:outputText value="#{nevent.processedBy}" />                              
                     </p:column>
                     <p:column id="procDate" headerText="Proc Date" sortBy="#{nevent.processDate}">                  

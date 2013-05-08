@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * This software is Copyright by the Board of Trustees of Michigan
+ * State University (c) Copyright 2012.
+ * 
+ * You may use this software under the terms of the GNU public license
+ *  (GPL). The terms of this license are described at:
+ *       http://www.gnu.org/licenses/gpl.txt
+ * 
+ * Contact Information:
+ *   Facilitty for Rare Isotope Beam
+ *   Michigan State University
+ *   East Lansing, MI 48824-1321
+ *   http://frib.msu.edu
+ * 
  */
 package org.openepics.names;
 
@@ -28,7 +39,7 @@ public class RequestManager implements Serializable {
     @EJB
     private NamesEJBLocal namesEJB;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    private List<NameEvent> standardNames;
+    private List<NameEvent> validNames;
     private NameEvent selectedName;
     private List<NameEvent> filteredNames;
     private List<NameEvent> historyEvents;
@@ -40,14 +51,14 @@ public class RequestManager implements Serializable {
     private String newDescription;
     private String newComment;
     
-    private static final Map<String,String> statusNames;
+    private static final Map<String,String> requestTypeNames;
     static {
         Map<String,String> map = new HashMap<String,String>();
-        map.put("a", "Approved");
-        map.put("c", "Cancelled");
-        map.put("r", "Rejected");
-        map.put("p", "Being Processed");
-        statusNames = Collections.unmodifiableMap(map);
+        map.put("i", "Add");
+        map.put("m", "Modify");
+        map.put("d", "Delete");
+        map.put("c", "Cancel");
+        requestTypeNames = Collections.unmodifiableMap(map);
     }
            
     /**
@@ -62,16 +73,16 @@ public class RequestManager implements Serializable {
             if (option == null) option = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("option");
             
             if (option == null) {
-                standardNames = namesEJB.getApprovedNames(); // ToDo; check 'user'
+                validNames = namesEJB.getValidNames();
                 myRequest = false;
             } else if ("user".equals(option)) {
-                standardNames = namesEJB.getUserRequests();
+                validNames = namesEJB.getUserRequests();
                 myRequest = true;
             }
             newCategory = newCode = newDescription = newComment = null;
-            selectedName = standardNames == null? null : standardNames.get(0);
+            selectedName = validNames == null? null : validNames.get(0);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Could not initialize NameManager.");
+            logger.log(Level.SEVERE, "Could not initialize Request Manager.");
             System.err.println(e);
         }
     }
@@ -82,7 +93,7 @@ public class RequestManager implements Serializable {
         try {
             logger.log(Level.INFO, "Modifying ");
             newRequest = namesEJB.createNewEvent('m', selectedName.getNameId(), newCategory, newCode, newDescription, newComment);
-            showMessage(FacesMessage.SEVERITY_INFO, "Your request was subbessfully submitted.", "Request Number: " + newRequest.getId());
+            showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -100,7 +111,7 @@ public class RequestManager implements Serializable {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Code is empty", " ");
             }
             newRequest = namesEJB.createNewEvent('i', "", newCategory, newCode, newDescription, newComment);
-            showMessage(FacesMessage.SEVERITY_INFO, "Your request was subbessfully submitted.", "Request Number: " + newRequest.getId());
+            showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -109,6 +120,13 @@ public class RequestManager implements Serializable {
         }
     }
 
+    /*
+     * Has the selectedName been processed?
+     */
+    public boolean selectedEventProcessed() {
+        return selectedName == null? false: selectedName.getStatus() != 'p';
+    }
+    
     public void onDelete() {
         NameEvent newRequest;
         
@@ -122,7 +140,7 @@ public class RequestManager implements Serializable {
             newRequest = namesEJB.createNewEvent('d', selectedName.getNameId(), 
                     selectedName.getNameCategoryId().getId(), selectedName.getNameCode(), 
                     selectedName.getNameDescription(), newComment);
-            showMessage(FacesMessage.SEVERITY_INFO, "Your request was subbessfully submitted.", "Request Number: " + newRequest.getId());
+            showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -157,12 +175,15 @@ public class RequestManager implements Serializable {
         
     }
 
-    public String statusName(char s) {
-        String status = statusNames.get(String.valueOf(s));
-        if (status == null ) {
-            status = "Invalid Status";
+    /*
+     * Convert a type code (p, a, r etc) to descriptive string
+     */
+    public String requestType(char s) {
+        String tname = requestTypeNames.get(String.valueOf(s));
+        if (tname == null ) {
+            tname = "Invalid Request Type";
         }
-        return status;
+        return tname;
     }
     
     // ToDo: merge with same method in NamesManager
@@ -175,7 +196,7 @@ public class RequestManager implements Serializable {
             }
             logger.log(Level.INFO, "history ");
             historyEvents = namesEJB.findEventsByName(selectedName.getNameId());
-            // showMessage(FacesMessage.SEVERITY_INFO, "Your request was subbessfully submitted.", "Request Number: " + newRequest.getId());
+            // showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -185,8 +206,8 @@ public class RequestManager implements Serializable {
     }
     /* --------------------------- */
 
-    public List<NameEvent> getStandardNames() {
-        return standardNames;
+    public List<NameEvent> getValidNames() {
+        return validNames;
     }
 
     public NameEvent getSelectedName() {

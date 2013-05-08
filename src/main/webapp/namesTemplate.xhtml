@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
 
     <h:head>
@@ -15,23 +16,31 @@
 
     <h:body>
 
-    <div id="full" class="boxf">
-        <div id="top" class="box">
-            <div class="Logo">Proteus: Naming System</div>
-            <div id="menu" class="menubar">
-               <ui:include src="menubar.xhtml"/>
+        <div id="full" class="boxf">
+            <div id="top" class="box">
+                <p:panel styleClass="Logo">
+                    <h:outputText value="Proteus: Naming System"  styleClass="title"/>
+                    <h:panelGroup style="float:  right; font-size:  x-small">
+                        <h:outputText value="Release: #{publicationManager.latestRelease.id} " />                    
+                        <h:outputText value="#{publicationManager.latestRelease.releaseDate}">                    
+                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                    </h:outputText>
+                    </h:panelGroup>                   
+                </p:panel>                 
+                <div id="menu" >                    
+                    <ui:include src="menubar.xhtml"/>
+                </div>
             </div>
-        </div>
 
-        <div id="content" class="box" align="center">
-            <ui:insert name="content">Content</ui:insert>
-        </div>
+            <div id="content" class="box"  align="center">
+                <ui:insert name="content">Content</ui:insert>
+            </div>
 
-        <div id="bottom" >
-            Copyright &copy; Facility for Rare Isotope Beam (FRIB), Michigan State University, 640 S. Shaw Lane, East Lansing, Michigan 48824-1321.
-        </div>
+            <div id="bottom" >
+                Copyright &copy; Facility for Rare Isotope Beam (FRIB), Michigan State University, 640 S. Shaw Lane, East Lansing, Michigan 48824-1321.              
+            </div>
 
-     </div>
+        </div>
     </h:body>
 
 </html>

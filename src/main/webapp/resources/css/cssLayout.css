@@ -1,13 +1,37 @@
+.Modified {
+    background-color:   palegreen; 
+}
+
+.Added {
+    background-color:   palegreen; 
+}
+
+.In-Process {
+    background-color:    salmon; 
+}
+
+.Deleted {
+    text-decoration:   line-through;
+    opacity:  0.6;
+}
+
+.Published {
+}
+
+.unknown, .Cancelled  {
+    text-decoration:   blink;
+}
+
 .noBorders>tbody>tr, .noBorders>tbody>tr>td {
     background: none;
     border: none;
-    vertical-align: top;
+    /* vertical-align: top; */
 }
 
 .fixedPosition {
     position: fixed;
-    right: 10%;
-    top: 20%;
+    right: 5%;
+    top: 10%;
 }
 
 .box {
@@ -27,7 +51,7 @@
     padding: 10px;
     border: 0px solid #000000;
     color: black;
-    width: 80%;
+    width: 90%;
     margin: 0  auto;
     /* background-color: #FFFFFF; */
 }
@@ -47,30 +71,34 @@
     text-align: left;
 }
 .menubar {
-    color: LightSlateGray;
+    /* color: LightSlateGray; */
 }
 
+
+.title {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 24px; 
+    font-style: normal;
+    font-weight: bold; 
+}
 .Logo
 {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: bold;
-	vertical-align: middle;
-	left: 15px;
-	padding: 10px;
-	text-decoration: none;
-        background-image: url('../images/header-bg.png'); 
-        background-repeat: repeat;
+    font-style: normal;
+    vertical-align: middle;
+    left: 15px;
+    padding: 10px;
+    text-decoration: none;
+    background-image: url('../images/header-bg.png'); 
+    background-repeat: repeat;
 }
 
 .ui-datatable-data {
-	text-align: left;
+    text-align: left;
 }
+
 
 #top {
     position: relative;
-    color: black;
     border: 1px;
     padding: 5px;
     margin: 0px 0px 10px 0px;
@@ -82,6 +110,11 @@
     color: LightSlateGray;
     padding: 10px;
     margin: 10px 0px 0px 0px;
+}
+
+/*
+#content {
+    text-align: left;
 }
 
 #left {
@@ -115,15 +148,17 @@
     padding: 5px;
     margin: 0px 170px 0px 170px;
 }
-
+*/
+/*
 #top a:link, #top a:visited {
-  color: black;
-  font-weight : bold;
-  text-decoration: none;
+    color: black;
+    font-weight : bold;
+    text-decoration: none;
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  color: lightslategrey;
-  font-weight : bold;
-  text-decoration : underline;
+    color: lightslategrey;
+    font-weight : bold;
+    text-decoration : underline;
 }
+*/

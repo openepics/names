@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content">
+        Oops, an error has occurred. Here are the details:
+
+        <ul>
+            <li>Date/time: #{of:formatDate(now, 'yyyy-MM-dd HH:mm:ss')}</li>
+            <li>User agent: #{header['user-agent']}</li>
+            <li>User IP: #{empty header['x-forwarded-for'] ? request.remoteAddr : fn:split(header['x-forwarded-for'], ',')[0]}</li>
+            <li>Request URI: <a href="#{requestScope['javax.servlet.error.request_uri']}">#{requestScope['javax.servlet.error.request_uri']}</a></li>
+            <li>Ajax request: #{facesContext.partialViewContext.ajaxRequest ? 'Yes' : 'No'}</li>
+            <li>Status code: #{requestScope['javax.servlet.error.status_code']}</li>
+            <li>Exception type: #{requestScope['javax.servlet.error.exception_type']}</li>
+            <li>Exception message: #{requestScope['javax.servlet.error.message']}</li>
+            <li>Stack trace: <pre><code>#{of:printStackTrace(requestScope['javax.servlet.error.exception'])}</code></pre></li>
+        </ul>
+    </ui:define>
+
+</ui:composition>

@@ -1,8 +1,13 @@
+body {
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif; 
+}
+/*
 
 body {
-    background-color: #ffffff;
+    background-color: #ffffff; 
     font-size: 12px;
-    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif; 
     color: #000000;  
     margin: 10px;
   
@@ -18,14 +23,15 @@ h1 {
     color: #D20005;
 }
 
+
 a:link, a:visited {
-  color: #045491;
-  /* font-weight : bold; */
+  color: #045491; 
   text-decoration: none;
 }
 
 a:link:hover, a:visited:hover  {
   color: #045491;
-  /* font-weight : bold; */
   text-decoration : underline;
 }
+
+*/

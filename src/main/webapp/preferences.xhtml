@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                >
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel  header="Note" style="text-align: left; border: 0px">
+                This feature is experimental. In this version, preferences are saved only for the current session. 
+                Once your session expires, preferences are switched back to their default values. 
+                In future versions, preferences will be saved across sessions.
+                Some of the themes may interfere with the status-based background colors for names.
+            </p:panel>
+
+
+            <p:panelGrid  styleClass="noBorders"> 
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Theme: " /> 
+                    </p:column>
+                    <p:column>
+                        <p:themeSwitcher value="#{preferencesManager.currentTheme}" >  
+                            <f:selectItem itemLabel="Choose Theme" itemValue="" />  
+                            <f:selectItems value="#{preferencesManager.themes}" /> 
+                            <p:ajax listener="#{preferencesManager.saveTheme}" /> 
+                        </p:themeSwitcher> 
+                    </p:column>
+                </p:row>
+
+
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                >
+
+    <ui:define name="content">
+        <h:outputText value="Sorry, you are not authorized to perform this action." rendered="#{not userManager.editor}" />
+        <h:form id="publishForm" rendered="#{userManager.editor}"> 
+
+            <p:menu id="reqMenu" styleClass="fixedPosition box"  style="width: 8%" >
+                <p:submenu label="Publish">                                          
+                    <p:menuitem value="Publish" icon="ui-icon-plus" oncomplete="addRelease.show()" title="Release a new version"  />                                                         
+                    <p:menuitem value="Delete" icon="ui-icon-trash" title="Delete Release" disabled="true"/>                      
+                    <p:menuitem value="Modify" icon="ui-icon-pencil" title="Modify Release" disabled="true"/>                                           
+                </p:submenu>
+            </p:menu>
+
+            <p:contextMenu id="cntxtMenu" for="releaseTable">
+                <p:menuitem value="Add" icon="ui-icon-plus"  oncomplete="addRelease.show()" />                
+                <p:menuitem value="Delete"  icon="ui-icon-trash"   disabled="true"/>                
+                <p:menuitem value="Modify"  icon="ui-icon-pencil"  disabled="true"/> 
+            </p:contextMenu>
+            <p:dataTable id="releaseTable" var="release" value="#{publicationManager.releases}" 
+                         paginator="true" rows="25" resizableColumns="true"                                   
+                         rowKey="#{release.id}"                         
+                         emptyMessage="There are no pending requests."
+                         selection="#{publicationManager.selectedRelease}"                         
+                         style="width: 90%">
+                <f:facet name="header">
+                    <h:outputText value="Releases" />                                       
+                </f:facet>              
+
+                <p:column id="id" headerText="Id" sortBy="#{release.id}" >                  
+                    <h:outputText value="#{release.id}" />                              
+                </p:column>
+                <p:column id="nameDesc" headerText="Description" 
+                          filterMatchMode="contains"  >                  
+                    <h:outputText value="#{release.description}" />                              
+                </p:column>
+
+                <p:column id="nameDate" headerText="Release Date" 
+                          sortBy="#{release.releaseDate}" >                  
+                    <h:outputText value="#{release.releaseDate}" >                    
+                        <f:convertDateTime pattern="yyyy-MM-dd  HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column id="nameURL" headerText="URL" >                  
+                    <h:outputText value="#{release.docUrl}" />                              
+                </p:column> 
+
+            </p:dataTable>
+
+            <p:growl id="releaseMsgs" showDetail="true"/>   
+        </h:form>
+
+        <h:form id="addReleaseForm" >      
+            <p:dialog id="addRelease"  widgetVar="addRelease">                
+                <f:facet name="header">  
+                    <h:outputText value="Publish Names (Relase a new version)"/>  
+                </f:facet>
+                <p:panelGrid columns="2" style="text-align: left">                 
+
+                    <h:outputLabel for="relid" value="Release ID:" />                     
+                    <h:inputText id="relid" value="#{publicationManager.inputRelease.id}" 
+                                 required="true"  label="Release's unique name" />                   
+
+                    <h:outputLabel for="relurl" value="Document URL:" />                    
+                    <p:inputTextarea id="relurl" value="#{publicationManager.inputRelease.docUrl}" 
+                                     rows="4" cols="60"
+                                     required="true"  label="URL of the published document"/>
+
+                    <h:outputLabel for="reldesc" value="Description:" /> 
+                    <p:inputTextarea id="reldesc" rows="5" cols="60" counter="icounter" maxlength="254" 
+                                     value="#{publicationManager.inputRelease.description}"
+                                     counterTemplate="{0} characters remaining." autoResize="false"
+                                     required="true"  label="A description of the release" />                                     
+                </p:panelGrid>
+                <h:outputText id="icounter" />               
+                <p:watermark for="relid" value="Enter Release ID" />
+                <p:watermark for="reldesc" value="Enter Description" />
+                <p:watermark for="relurl" value="Enter Published Document's URL" />             
+                <p:separator />
+
+                <p:commandButton value="Submit" style="float: left"
+                                 update=":publishForm"                               
+                                 oncomplete="addRelease.hide()"  
+                                 action="#{publicationManager.onAdd()}"/> 
+                <p:commandButton  value="Cancel" style="float: right"
+                                  onclick="addRelease.hide()"  />  
+            </p:dialog> 
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,2 +1,2 @@
 id	description	doc_url	release_date	version
-R003	Rivision 3	https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T10500-PR-000001-R003.pdf	'2013-01-31 18:29:54'	0
+R003	Revision 3	https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T10500-PR-000001-R003.pdf	'2013-01-31 18:29:54'	0

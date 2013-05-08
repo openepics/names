@@ -3,7 +3,7 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 CREATE SCHEMA IF NOT EXISTS `discs_names2` DEFAULT CHARACTER SET latin1 ;
-USE `discs_names2` ;
+USE `discs_names` ;
 
 -- -----------------------------------------------------
 -- Table `configuration`
@@ -103,7 +103,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Data for table `configuration`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `discs_names2`;
+USE `discs_names`;
 INSERT INTO `configuration` (`name`, `value`) VALUES ('version', '2.2');
 
 COMMIT;

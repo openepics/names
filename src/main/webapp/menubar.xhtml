@@ -13,12 +13,12 @@
         <ui:include src="login.xhtml" />
         <p:menubar id="mainMenu">
             <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
-            <p:menuitem value="All" icon="ui-icon-script" title="All Names" url="names.xhtml"/>               
-            <p:menuitem value="Systems" icon="ui-icon-carat-2-n-s" title="System Names" url="names.xhtml?category=system" />                              
-            <p:menuitem value="Subsystems" icon="ui-icon-carat-2-e-w" title="Subsystem Names" url="names.xhtml?category=subsystem" /> 
-            <p:menuitem value="Devices" icon="ui-icon-power" title="Device Type Names" url="names.xhtml?category=device-type" /> 
+            <p:menuitem value="All" icon="ui-icon-arrow-4-diag" title="All Names" url="names.xhtml"/>               
 
-            <p:submenu label="Signal" icon="ui-icon-document">
+            <p:submenu label="Category" icon="ui-icon-carat-2-e-w">
+                <p:menuitem value="Systems"  title="System Names" url="names.xhtml?category=system" />                              
+                <p:menuitem value="Subsystems"  title="Subsystem Names" url="names.xhtml?category=subsystem" /> 
+                <p:menuitem value="Devices" title="Device Type Names" url="names.xhtml?category=device-type" /> 
                 <p:menuitem value="Signal Types" title="Signal Type Names" url="names.xhtml?category=signal-type" />
                 <p:menuitem value="Signal Domains" title="Signal Domain Names" url="names.xhtml?category=signal-domain" />
                 <p:menuitem value="Signal Suffixes" title="Signal Suffix Names" url="names.xhtml?category=signal-suffix" />
@@ -32,19 +32,23 @@
                             url="request-sub.xhtml?option=user" icon="ui-icon-comment" 
                             disabled="#{not userManager.loggedIn}" />
             </p:submenu>
-            
+
             <p:menuitem value="Reports" title="Reports"  icon="ui-icon-print" url="reports.xhtml" disabled="false" />
-          
+
             <p:submenu label="Admin" icon="ui-icon-note"  >
                 <p:menuitem value="Process Requests" title="Accept/Reject Requests" 
                             url="request-proc.xhtml" icon="ui-icon-wrench" 
-                            disabled="#{not userManager.editor}" />                                       
+                            disabled="#{not userManager.editor}" />
+                <p:menuitem value="Publish Names" title="Release a new version of Naming Convention" 
+                            url="publish.xhtml" icon="ui-icon-note" 
+                            disabled="#{not userManager.editor}" /> 
             </p:submenu>
 
+            <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="preferences.xhtml" />
             <p:submenu label="Help" icon="ui-icon-help">
-                <p:menuitem value=" FRIB Naming System" title="FRIB Naming Document" 
+                <p:menuitem value=" Naming Document" title="Latest Naming System Document" 
                             icon="ui-icon-document" target="_blank"
-                            url="https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T10500-PR-000001-R003.pdf" />
+                            url="#{publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>
                 <p:menuitem value=" Report Problems" title="Report Problems/Suggestions" 
                             icon="ui-icon-alert" target="_blank"
                             url="https://controls.frib.msu.edu/controlshelp/" />
@@ -60,7 +64,7 @@
                 <p:commandButton id="logoutBtn" value="Logout" 
                                  icon="ui-icon-person" update=":manageName:namesform:nameTable :menuform:mainMenu :menuform:menumsgs" 
                                  action="#{userManager.onLogout}" 
-                                 rendered="#{userManager.loggedIn}" ajax="false"/> 
+                                 rendered="#{userManager.loggedIn}" ajax="false"/>              
             </f:facet>
         </p:menubar>
 

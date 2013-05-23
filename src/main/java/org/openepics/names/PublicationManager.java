@@ -15,7 +15,6 @@
  */
 package org.openepics.names;
 
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,6 +27,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * Manages naming system releases
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */
@@ -42,31 +42,33 @@ public class PublicationManager implements Serializable {
     private NameRelease selectedRelease;
     private NameRelease inputRelease = new NameRelease();
     private NameRelease latestRelease;
-    
-    
+
     /**
      * Creates a new instance of PublicationManager
      */
     public PublicationManager() {
     }
-    
+
     @PostConstruct
     public void init() {
+        logger.log(Level.WARNING, "init publication manager");
         try {
             releases = namesEJB.getAllReleases();
-            if ( releases != null && ! releases.isEmpty() ) {
+            if (releases != null && !releases.isEmpty()) {
                 latestRelease = releases.get(0); // releases are assumed in descending order of release date
-            } 
+            } else {
+                logger.log(Level.WARNING, "No release information in the database.");
+            }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Could not initialize Publication Manager.");
             System.err.println(e);
         }
     }
 
-    public void onAdd() {        
+    public void onAdd() {
         try {
             logger.log(Level.INFO, "Adding a new Release");
-            if ( inputRelease.getId() == null || inputRelease.getId().isEmpty()) {
+            if (inputRelease.getId() == null || inputRelease.getId().isEmpty()) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Release ID is empty", " ");
             }
             inputRelease = namesEJB.createNewRelease(inputRelease);
@@ -84,9 +86,9 @@ public class PublicationManager implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         context.addMessage(null, new FacesMessage(severity, summary, message));
-        FacesMessage n = new FacesMessage();      
+        FacesMessage n = new FacesMessage();
     }
-    
+
     public List<NameRelease> getReleases() {
         return releases;
     }
@@ -114,5 +116,4 @@ public class PublicationManager implements Serializable {
     public NameRelease getLatestRelease() {
         return latestRelease;
     }
-    
 }

@@ -26,6 +26,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -64,7 +65,7 @@ public class NameRelease implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "version")
-    private int version;
+    @Version private int version;
 
     public NameRelease() {
     }

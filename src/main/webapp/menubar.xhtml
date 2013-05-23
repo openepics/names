@@ -5,16 +5,19 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
     xmlns:h="http://java.sun.com/jsf/html">
 
     <h:form id="menuform">
         <p:growl id="menumsgs" />
         <ui:include src="about.xhtml" />
         <ui:include src="login.xhtml" />
-        <p:menubar id="mainMenu">
-            <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
-            <p:menuitem value="All" icon="ui-icon-arrow-4-diag" title="All Names" url="names.xhtml"/>               
 
+        <p:menubar id="mainMenu" >
+            <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
+            <p:menuitem value="Browse" icon="ui-icon-arrow-4-diag" title="Browse All Names" url="names.xhtml"/>               
+
+            <!--
             <p:submenu label="Category" icon="ui-icon-carat-2-e-w">
                 <p:menuitem value="Systems"  title="System Names" url="names.xhtml?category=system" />                              
                 <p:menuitem value="Subsystems"  title="Subsystem Names" url="names.xhtml?category=subsystem" /> 
@@ -23,9 +26,10 @@
                 <p:menuitem value="Signal Domains" title="Signal Domain Names" url="names.xhtml?category=signal-domain" />
                 <p:menuitem value="Signal Suffixes" title="Signal Suffix Names" url="names.xhtml?category=signal-suffix" />
             </p:submenu>
+            -->
 
-            <p:submenu label="Requests" icon="ui-icon-comment">
-                <p:menuitem value="Submit Requests" title="Submit a Change Requests" 
+            <p:submenu label="Request" icon="ui-icon-comment">
+                <p:menuitem value="Submit Request" title="Submit a Change Request" 
                             url="request-sub.xhtml" icon="ui-icon-suitcase" 
                             disabled="#{not userManager.loggedIn}" />            
                 <p:menuitem value="My Requests" title="Check status of your requests" 
@@ -46,12 +50,13 @@
 
             <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="preferences.xhtml" />
             <p:submenu label="Help" icon="ui-icon-help">
-                <p:menuitem value=" Naming Document" title="Latest Naming System Document" 
+                <p:menuitem value=" Naming Document" title="Latest Naming System Document"
                             icon="ui-icon-document" target="_blank"
-                            url="#{publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>
+                            url="#{publicationManager.latestRelease eq null? '/' : publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>
                 <p:menuitem value=" Report Problems" title="Report Problems/Suggestions" 
                             icon="ui-icon-alert" target="_blank"
-                            url="https://controls.frib.msu.edu/controlshelp/" />
+                            url="https://controls.frib.msu.edu/controlshelp/" 
+                            rendered="false"/>
                 <p:menuitem value=" About" id="aboutMenu" icon="ui-icon-info" 
                             title="About Proteus: Naming" />                          
             </p:submenu>
@@ -66,7 +71,7 @@
                                  action="#{userManager.onLogout}" 
                                  rendered="#{userManager.loggedIn}" ajax="false"/>              
             </f:facet>
-        </p:menubar>
 
+        </p:menubar>
     </h:form>  
 </ui:composition>

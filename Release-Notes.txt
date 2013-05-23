@@ -6,6 +6,18 @@ Release Notes: Naming System Application
 
 Overview: Naming System is for managing the FRIB Naming Convention. 
 
+Naming System Version 2.3  Date: 2013-May-24
+
+Summary of Changes from Previous Version:
+  - It is somewhat generic so other labs can use it.
+  - Name Categories come from the database.
+  - Authentication is now through container not Auth service
+  - Fixed empty-database bugs
+  
+  Known Defects:
+  - Categories and privileges have to be loaded manually
+  - index.html has to be replaced manually (by other labs)  
+  
 Naming System Version 2.1  Date: 2013-May-07
 
 Summary of Changes from Previous Version:

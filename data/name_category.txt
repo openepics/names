@@ -1,7 +1,0 @@
-id	name	description	version
-device-type	Device-Type	Device-Type	0
-signal-domain	Signal Domain	Signal Domain	0
-signal-suffix	Signal Suffix	Signal Suffix	0
-signal-type	Signal Type	Signal Type	0
-subsystem	Subsystem	Subsystem	0
-system	System	System	0

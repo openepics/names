@@ -1,22 +1,10 @@
 /*
- * This software is Copyright by the Board of Trustees of Michigan
- * State University (c) Copyright 2012.
- * 
- * You may use this software under the terms of the GNU public license
- *  (GPL). The terms of this license are described at:
- *       http://www.gnu.org/licenses/gpl.txt
- * 
- * Contact Information:
- *   Facilitty for Rare Isotope Beam
- *   Michigan State University
- *   East Lansing, MI 48824-1321
- *   http://frib.msu.edu
- * 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.openepics.names;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,8 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Privilege.findAll", query = "SELECT p FROM Privilege p"),
     @NamedQuery(name = "Privilege.findByUserid", query = "SELECT p FROM Privilege p WHERE p.userid = :userid"),
     @NamedQuery(name = "Privilege.findByOperation", query = "SELECT p FROM Privilege p WHERE p.operation = :operation"),
-    @NamedQuery(name = "Privilege.findByTimestamp", query = "SELECT p FROM Privilege p WHERE p.timestamp = :timestamp")})
+    @NamedQuery(name = "Privilege.findByVersion", query = "SELECT p FROM Privilege p WHERE p.version = :version")})
 public class Privilege implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,9 +42,10 @@ public class Privilege implements Serializable {
     @Size(min = 1, max = 1)
     @Column(name = "operation")
     private String operation;
-    @Column(name = "timestamp")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "version")
+    @Version private int version;
 
     public Privilege() {
     }
@@ -66,9 +54,10 @@ public class Privilege implements Serializable {
         this.userid = userid;
     }
 
-    public Privilege(String userid, String operation) {
+    public Privilege(String userid, String operation, int version) {
         this.userid = userid;
         this.operation = operation;
+        this.version = version;
     }
 
     public String getUserid() {
@@ -87,12 +76,12 @@ public class Privilege implements Serializable {
         this.operation = operation;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public int getVersion() {
+        return version;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override

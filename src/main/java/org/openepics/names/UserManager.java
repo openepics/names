@@ -21,7 +21,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.openepics.auth.japi.AuthResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -48,42 +48,83 @@ public class UserManager implements Serializable {
     }
 
     public String onLogin() {
-        AuthResponse resp;
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            resp = namesEJB.authenticate(inputUserID, inputPassword);
+            // resp = namesEJB.authenticate(inputUserID, inputPassword);
+
+            request.login(this.inputUserID, this.inputPassword);
             inputPassword = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
-            if (resp == null) {
-                showMessage(FacesMessage.SEVERITY_ERROR, "This is embarassing; cannot authenticate you.", "Most probably authenticate service is not configured.");
-            }
-            if (resp.getStatus() == 0) {
-                Ticket = resp.getTicket();
-                LoggedIn = true;
-                User = inputUserID;
-                Editor = namesEJB.isEditor(User);
-                showMessage(FacesMessage.SEVERITY_INFO, "You are logged in. Welcome to Proteus.", inputUserID);
-            } else {
-                Ticket = null;
-                LoggedIn = false;
-                User = null;
-                Editor = false;
-                showMessage(FacesMessage.SEVERITY_ERROR, "Login Failed! Please try again. ", "Status: " + resp.getStatus());
-            }
+            LoggedIn = true;
+            User = inputUserID;
+            Editor = namesEJB.isEditor(User);
+            showMessage(FacesMessage.SEVERITY_INFO, "You are logged in. Welcome to Proteus.", inputUserID);
+
         } catch (Exception e) {
+            Ticket = null;
+            LoggedIn = false;
+            User = null;
+            Editor = false;
+            showMessage(FacesMessage.SEVERITY_ERROR, "Login Failed! Please try again. ", "Status: ");
+
         } finally {
         }
         return null;
     }
 
     public String onLogout() {
-        LoggedIn = false;
-        Ticket = "";
-        inputUserID = "";
-        Editor = false;
-        showMessage(FacesMessage.SEVERITY_INFO, "You have been logged out.", "Thank you!");
-        return null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            request.logout();
+            LoggedIn = false;
+            Ticket = "";
+            inputUserID = "";
+            Editor = false;
+            showMessage(FacesMessage.SEVERITY_INFO, "You have been logged out.", "Thank you!");
+        } catch (Exception e) {
+            showMessage(FacesMessage.SEVERITY_ERROR, "Strangely, logout has failed", "That's odd!");
+        }
+
+        return "/index.xhtml";
     }
 
+//    public String onLogin() {
+//        AuthResponse resp;
+//
+//        try {
+//            resp = namesEJB.authenticate(inputUserID, inputPassword);
+//            inputPassword = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
+//            if (resp == null) {
+//                showMessage(FacesMessage.SEVERITY_ERROR, "This is embarassing; cannot authenticate you.", "Most probably authenticate service is not configured.");
+//            }
+//            if (resp.getStatus() == 0) {
+//                Ticket = resp.getTicket();
+//                LoggedIn = true;
+//                User = inputUserID;
+//                Editor = namesEJB.isEditor(User);
+//                showMessage(FacesMessage.SEVERITY_INFO, "You are logged in. Welcome to Proteus.", inputUserID);
+//            } else {
+//                Ticket = null;
+//                LoggedIn = false;
+//                User = null;
+//                Editor = false;
+//                showMessage(FacesMessage.SEVERITY_ERROR, "Login Failed! Please try again. ", "Status: " + resp.getStatus());
+//            }
+//        } catch (Exception e) {
+//        } finally {
+//        }
+//        return null;
+//    }
+//
+//    public String onLogout() {
+//        LoggedIn = false;
+//        Ticket = "";
+//        inputUserID = "";
+//        Editor = false;
+//        showMessage(FacesMessage.SEVERITY_INFO, "You have been logged out.", "Thank you!");
+//        return null;
+//    }
     public String getTicket() {
         return Ticket;
     }
@@ -124,6 +165,7 @@ public class UserManager implements Serializable {
         return Editor;
     }
 
+    // ToDo: Move it to a common utility class
     private void showMessage(FacesMessage.Severity severity, String summary, String message) {
         FacesContext context = FacesContext.getCurrentInstance();
 

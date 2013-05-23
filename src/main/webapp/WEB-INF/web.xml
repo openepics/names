@@ -29,8 +29,11 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/expired.xhtml</location>
     </error-page>
-    <context-param> 
-        <param-name>primefaces.THEME</param-name> 
-        <param-value>#{preferencesManager.currentTheme}</param-value> 
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>#{preferencesManager.currentTheme}</param-value>
     </context-param>
+    <login-config>
+        <realm-name>org.openepics.names.realm</realm-name>
+    </login-config>
 </web-app>

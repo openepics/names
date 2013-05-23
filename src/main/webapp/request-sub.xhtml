@@ -14,19 +14,20 @@
         <h:form id="ReqSubForm" rendered="#{userManager.loggedIn}"> 
             <p:growl id="requestMsgs" showDetail="true" sticky="false"  life="30000" />
 
+            <!-- =================== Menus      ============================ -->
             <p:menu id="reqMenu" styleClass="fixedPosition box" style="width: 8%">
                 <p:submenu label="Requests">                                          
-                    <p:menuitem value="Add Name" icon="ui-icon-plus" oncomplete="addName.show()" 
-                                title="Add"  rendered="#{not requestManager.myRequest}"/>                                                         
-                    <p:menuitem value="Delete Name" icon="ui-icon-trash" update=":DelNameForm" 
-                                oncomplete="delName.show()" title="Delete" rendered="#{not requestManager.myRequest}" 
+                    <p:menuitem value="Add" icon="ui-icon-plus" oncomplete="addName.show()" 
+                                title="Add Name"  rendered="#{not requestManager.myRequest}"/>                                                         
+                    <p:menuitem value="Delete" icon="ui-icon-trash" update=":DelNameForm" 
+                                oncomplete="delName.show()" title="Delete Name" rendered="#{not requestManager.myRequest}" 
                                 disabled="#{empty requestManager.selectedName}"/>                      
-                    <p:menuitem value="Modify Name" icon="ui-icon-pencil" update=":ModNameForm" 
-                                oncomplete="modName.show()" title="Modify" rendered="#{not requestManager.myRequest}" 
+                    <p:menuitem value="Modify" icon="ui-icon-pencil" update=":ModNameForm" 
+                                oncomplete="modName.show()" title="Modify Name" rendered="#{not requestManager.myRequest}" 
                                 disabled="#{empty requestManager.selectedName}"/>  
-                    <p:menuitem value="View History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
-                                update=":ReqSubForm:historyTable" oncomplete="nameDetail.show()" />  
-                    <p:menuitem value="Cancel Request" icon="ui-icon-close" update=":CancelReqForm" 
+                    <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
+                                update=":ReqSubForm:historyTable" title="View History" oncomplete="nameDetail.show()" />  
+                    <p:menuitem value="Cancel" icon="ui-icon-close" update=":CancelReqForm" 
                                 oncomplete="cancelReq.show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
                                 disabled="#{requestManager.selectedEventProcessed()}"/>                                          
                 </p:submenu>
@@ -41,13 +42,14 @@
                 <p:menuitem value="Modify" update=":ModNameForm" icon="ui-icon-pencil"  
                             oncomplete="modName.show()" rendered="#{not requestManager.myRequest}" 
                             disabled="#{empty requestManager.selectedName}"/> 
-                <p:menuitem value="View History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
-                                update=":ReqSubForm:historyTable" oncomplete="nameDetail.show()" /> 
+                <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
+                            update=":ReqSubForm:historyTable" oncomplete="nameDetail.show()" /> 
                 <p:menuitem value="Cancel Request" icon="ui-icon-close" update=":CancelReqForm" 
                             oncomplete="cancelReq.show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
                             disabled="#{requestManager.selectedEventProcessed()}"/>
             </p:contextMenu>
 
+            <!-- ===================Data Table============================ -->
             <p:dataTable id="crTable" var="nevent" value="#{requestManager.validNames}" 
                          paginator="true" rows="50" resizableColumns="true"                                   
                          rowKey="#{nevent.id}"                          
@@ -67,8 +69,8 @@
                     <h:outputText value="#{namesManager.nameStatus(nevent)}" />                              
                 </p:column>
                 <p:column id="type" headerText="Type" rendered="#{requestManager.myRequest}" style="width: 7%">                  
-                        <h:outputText value="#{requestManager.requestType(nevent.eventType)}" />                              
-                    </p:column>
+                    <h:outputText value="#{requestManager.requestType(nevent.eventType)}" />                              
+                </p:column>
                 <p:column id="nameCat" headerText="Category" filterBy="#{nevent.nameCategoryId.id}"
                           filterMatchMode="contains" style="width: 15%" >                  
                     <h:outputText value="#{nevent.nameCategoryId.id}" />                              
@@ -83,7 +85,8 @@
                 </p:column>
 
             </p:dataTable> 
-            
+
+            <!-- ===================Name History============================ -->
             <!-- ToDo: find better way to adjust width of the panel -->
             <p:dialog id="nameDetail"  widgetVar="nameDetail" width="900" dynamic="true"
                       maximizable="true" minimizable="true" header="Name Details"
@@ -139,6 +142,7 @@
             </p:dialog> 
         </h:form>
 
+        <!-- ===================Add Form================================= -->
         <h:form id="addNameForm" >      
             <p:dialog id="addName"  widgetVar="addName">                
                 <f:facet name="header">  
@@ -146,13 +150,9 @@
                 </f:facet>
                 <p:panelGrid columns="2" style="text-align: left">
                     <h:outputLabel for="ipart" value="Category:" />
-                    <p:selectOneMenu id="ipart" value="#{requestManager.newCategory}" >
-                        <f:selectItem itemLabel="System" itemValue="system" />  
-                        <f:selectItem itemLabel="Sub-system" itemValue="subsystem" />  
-                        <f:selectItem itemLabel="Device-type" itemValue="device-type" />  
-                        <f:selectItem itemLabel="Signal-type" itemValue="signal-type" /> 
-                        <f:selectItem itemLabel="Signal-domain" itemValue="signal-domain" /> 
-                        <f:selectItem itemLabel="Signal-suffix" itemValue="signal-suffix" /> 
+                    <p:selectOneMenu id="ipart" value="#{requestManager.newCategory}">
+                        <f:selectItems value="#{menuManager.categories}" var="acat"
+                                       itemLabel="#{acat.name}" itemValue="#{acat.id}" />                       
                     </p:selectOneMenu>  
 
                     <h:outputLabel for="icode" value="Code:" />                     
@@ -184,6 +184,7 @@
             </p:dialog> 
         </h:form>
 
+        <!-- ===================Modify Form================================= -->      
         <h:form id="ModNameForm" >
             <p:dialog  widgetVar="modName">                
                 <f:facet name="header">  
@@ -201,14 +202,12 @@
                     <p:row>
                         <p:column><h:outputLabel for="mpart" value="Category:" /></p:column>
                         <p:column><h:outputText value="#{requestManager.selectedName.nameCategoryId.name}" /></p:column>
-                        <p:column><p:selectOneMenu id="mpart" value="#{requestManager.newCategory}" >
-                                <f:selectItem itemLabel="System" itemValue="system" />  
-                                <f:selectItem itemLabel="Sub-system" itemValue="subsystem" />  
-                                <f:selectItem itemLabel="Device-type" itemValue="device-type" />  
-                                <f:selectItem itemLabel="Signal-type" itemValue="signal-type" /> 
-                                <f:selectItem itemLabel="Signal-domain" itemValue="signal-domain" /> 
-                                <f:selectItem itemLabel="Signal-suffix" itemValue="signal-suffix" /> 
-                            </p:selectOneMenu> </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="mpart" value="#{requestManager.newCategory}" >                             
+                                <f:selectItems value="#{menuManager.categories}" var="mcat"
+                                               itemValue="#{mcat.id}" itemLabel="#{mcat.name}" />
+                            </p:selectOneMenu> 
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column><h:outputLabel for="mcode" value="Code:"  /> </p:column>
@@ -248,6 +247,8 @@
                                   onclick="modName.hide()"  />  
             </p:dialog>
         </h:form>
+        
+        <!-- ===================Delete Form================================= -->
         <h:form id="DelNameForm" >
             <p:dialog id="delName"  widgetVar="delName">                
                 <f:facet name="header">  
@@ -283,6 +284,7 @@
             </p:dialog>                       
         </h:form>
 
+        <!-- ===================Cancel Form    ============================ -->
         <h:form id="CancelReqForm" >
             <p:dialog id="cancelReq"  widgetVar="cancelReq">                
                 <f:facet name="header">  

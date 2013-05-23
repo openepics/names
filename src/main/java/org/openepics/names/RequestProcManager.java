@@ -27,6 +27,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * Manages Request Processing (backing bean for request-proc.xhtml)
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */

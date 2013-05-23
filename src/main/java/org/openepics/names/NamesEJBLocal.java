@@ -17,7 +17,7 @@ package org.openepics.names;
 
 import java.util.List;
 import javax.ejb.Local;
-import org.openepics.auth.japi.AuthResponse;
+// import org.openepics.auth.japi.AuthResponse;
 
 /**
  *
@@ -41,6 +41,6 @@ public interface NamesEJBLocal {
     public NameRelease createNewRelease(NameRelease newRelease) throws Exception;
     public boolean isUnderChange(NameEvent nevent);
     public NameEvent findLatestEvent(String nameId);
-    public AuthResponse authenticate(String userid, String password) throws Exception;
-    
+    // public AuthResponse authenticate(String userid, String password) throws Exception;
+    public List<NameCategory> getCategories();
 }

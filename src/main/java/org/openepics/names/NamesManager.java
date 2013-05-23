@@ -28,6 +28,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * Manages naming events.
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */
@@ -37,16 +38,14 @@ public class NamesManager implements Serializable {
 
     @EJB
     private NamesEJBLocal namesEJB;
-    @ManagedProperty(value="#{publicationManager}")
+    @ManagedProperty(value = "#{publicationManager}")
     private PublicationManager pubManager;
-    
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    
     private List<NameEvent> standardNames;
     private NameEvent selectedName;
     private List<NameEvent> filteredNames;
     private List<NameEvent> historyEvents;
-    private boolean showDeletedNames = false; 
+    private boolean showDeletedNames = false;
     private String currentCategory;
 
     /**
@@ -71,13 +70,13 @@ public class NamesManager implements Serializable {
         }
     }
 
-    public void refreshNames() {        
+    public void refreshNames() {
         standardNames = namesEJB.getStandardNames(currentCategory, showDeletedNames);
     }
-   
+
     public void findHistory() {
         try {
-            if ( selectedName == null ) {
+            if (selectedName == null) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Error", "You must select a name first.");
                 historyEvents = null;
                 return;
@@ -89,10 +88,9 @@ public class NamesManager implements Serializable {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
         } finally {
-           
         }
     }
-    
+
     /*
      * returns a names status
      * 
@@ -137,7 +135,7 @@ public class NamesManager implements Serializable {
 
         return stat;
     }
-    
+
     private void showMessage(FacesMessage.Severity severity, String summary, String message) {
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -145,14 +143,15 @@ public class NamesManager implements Serializable {
         FacesMessage n = new FacesMessage();
 
     }
-    
+
     public boolean isUnderChange(NameEvent nevent) {
         return namesEJB.isUnderChange(nevent);
     }
+
     public void setPubManager(PublicationManager pubMgr) {
         this.pubManager = pubMgr;
     }
-    
+
     public NameEvent getSelectedName() {
         return selectedName;
     }
@@ -184,5 +183,4 @@ public class NamesManager implements Serializable {
     public void setShowDeletedNames(boolean showDeletedNames) {
         this.showDeletedNames = showDeletedNames;
     }
-    
 }

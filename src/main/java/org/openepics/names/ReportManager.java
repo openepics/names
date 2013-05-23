@@ -26,6 +26,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
+ * Manages report generation.
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */
@@ -42,26 +43,26 @@ public class ReportManager implements Serializable {
     private String eventStatus;
     private Date startDate, endDate;
     private String startRev, endRev;
-    
+
     /**
      * Creates a new instance of ReportManager
      */
     public ReportManager() {
     }
-    
+
     public void onGenReport() {
         try {
-            logger.log(Level.INFO,"Action: generating report");
+            logger.log(Level.INFO, "Action: generating report");
             // System.out.println("Action: generating report");
-            char etype = eventType == null? 0 : eventType.charAt(0);
+            char etype = eventType == null ? 0 : eventType.charAt(0);
             char estat = eventStatus == null ? 0 : eventStatus.charAt(0);
-            events = namesEJB.findEvents(etype, estat);          
+            events = namesEJB.findEvents(etype, estat);
         } catch (Exception e) {
             System.err.println(e);
         } finally {
             eventType = eventStatus = startRev = endRev = null;
             startDate = endDate = null;
-        }      
+        }
     }
 
     public List<NameEvent> getEvents() {
@@ -91,7 +92,7 @@ public class ReportManager implements Serializable {
     public void setEventStatus(String eventStatus) {
         this.eventStatus = eventStatus;
     }
-   
+
     public Date getStartDate() {
         return startDate;
     }
@@ -123,6 +124,4 @@ public class ReportManager implements Serializable {
     public void setEndRev(String endRev) {
         this.endRev = endRev;
     }
-    
-    
 }

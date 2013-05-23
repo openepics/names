@@ -30,12 +30,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * Manages Change Requests (backing bean for request-sub.xhtml)
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */
 @ManagedBean
 @ViewScoped
 public class RequestManager implements Serializable {
+
     @EJB
     private NamesEJBLocal namesEJB;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
@@ -50,28 +52,30 @@ public class RequestManager implements Serializable {
     private String newCode;
     private String newDescription;
     private String newComment;
-    
-    private static final Map<String,String> requestTypeNames;
+    private static final Map<String, String> requestTypeNames;
+
     static {
-        Map<String,String> map = new HashMap<String,String>();
+        Map<String, String> map = new HashMap<String, String>();
         map.put("i", "Add");
         map.put("m", "Modify");
         map.put("d", "Delete");
         map.put("c", "Cancel");
         requestTypeNames = Collections.unmodifiableMap(map);
     }
-           
+
     /**
      * Creates a new instance of RequestManager
      */
     public RequestManager() {
     }
-    
+
     @PostConstruct
     public void init() {
         try {
-            if (option == null) option = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("option");
-            
+            if (option == null) {
+                option = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("option");
+            }
+
             if (option == null) {
                 validNames = namesEJB.getValidNames();
                 myRequest = false;
@@ -80,7 +84,7 @@ public class RequestManager implements Serializable {
                 myRequest = true;
             }
             newCategory = newCode = newDescription = newComment = null;
-            selectedName = validNames == null? null : validNames.get(0);
+            selectedName = validNames == null ? null : validNames.get(0);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Could not initialize Request Manager.");
             System.err.println(e);
@@ -89,7 +93,7 @@ public class RequestManager implements Serializable {
 
     public void onModify() {
         NameEvent newRequest;
-        
+
         try {
             logger.log(Level.INFO, "Modifying ");
             newRequest = namesEJB.createNewEvent('m', selectedName.getNameId(), newCategory, newCode, newDescription, newComment);
@@ -101,13 +105,13 @@ public class RequestManager implements Serializable {
             init();
         }
     }
-    
+
     public void onAdd() {
         NameEvent newRequest;
-        
+
         try {
             logger.log(Level.INFO, "Adding ");
-            if ( newCode == null || newCode.isEmpty()) {
+            if (newCode == null || newCode.isEmpty()) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Code is empty", " ");
             }
             newRequest = namesEJB.createNewEvent('i', "", newCategory, newCode, newDescription, newComment);
@@ -124,21 +128,21 @@ public class RequestManager implements Serializable {
      * Has the selectedName been processed?
      */
     public boolean selectedEventProcessed() {
-        return selectedName == null? false: selectedName.getStatus() != 'p';
+        return selectedName == null ? false : selectedName.getStatus() != 'p';
     }
-    
+
     public void onDelete() {
         NameEvent newRequest;
-        
+
         try {
-            if (selectedName == null ) {
+            if (selectedName == null) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Error:", "You did not select any name.");
                 return;
             }
-            
+
             logger.log(Level.INFO, "Deleting ");
-            newRequest = namesEJB.createNewEvent('d', selectedName.getNameId(), 
-                    selectedName.getNameCategoryId().getId(), selectedName.getNameCode(), 
+            newRequest = namesEJB.createNewEvent('d', selectedName.getNameId(),
+                    selectedName.getNameCategoryId().getId(), selectedName.getNameCode(),
                     selectedName.getNameDescription(), newComment);
             showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
         } catch (Exception e) {
@@ -148,17 +152,17 @@ public class RequestManager implements Serializable {
             init();
         }
     }
-    
+
     public void onCancel() {
-        
+
         try {
-            if (selectedName == null ) {
+            if (selectedName == null) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Error:", "You did not select any request.");
                 return;
-            }          
+            }
             logger.log(Level.INFO, "Cancelling ");
             namesEJB.cancelRequest(selectedName.getId(), newComment);
-            showMessage(FacesMessage.SEVERITY_INFO, "Your request has been cancelled.", "Request Number: " );
+            showMessage(FacesMessage.SEVERITY_INFO, "Your request has been cancelled.", "Request Number: ");
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -166,13 +170,13 @@ public class RequestManager implements Serializable {
             init();
         }
     }
-    
+
     private void showMessage(FacesMessage.Severity severity, String summary, String message) {
         FacesContext context = FacesContext.getCurrentInstance();
 
         context.addMessage(null, new FacesMessage(severity, summary, message));
         FacesMessage n = new FacesMessage();
-        
+
     }
 
     /*
@@ -180,16 +184,16 @@ public class RequestManager implements Serializable {
      */
     public String requestType(char s) {
         String tname = requestTypeNames.get(String.valueOf(s));
-        if (tname == null ) {
+        if (tname == null) {
             tname = "Invalid Request Type";
         }
         return tname;
     }
-    
+
     // ToDo: merge with same method in NamesManager
     public void findHistory() {
         try {
-            if ( selectedName == null ) {
+            if (selectedName == null) {
                 showMessage(FacesMessage.SEVERITY_ERROR, "Error", "You must select a name first.");
                 historyEvents = null;
                 return;
@@ -201,7 +205,6 @@ public class RequestManager implements Serializable {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
         } finally {
-           
         }
     }
     /* --------------------------- */
@@ -260,10 +263,9 @@ public class RequestManager implements Serializable {
 
     public boolean isMyRequest() {
         return myRequest;
-    }    
+    }
 
     public List<NameEvent> getHistoryEvents() {
         return historyEvents;
     }
-    
 }

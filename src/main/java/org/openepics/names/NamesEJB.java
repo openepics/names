@@ -15,24 +15,21 @@
  */
 package org.openepics.names;
 
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.MultivaluedMap;
-import org.openepics.auth.japi.*;
+// import org.openepics.auth.japi.*;
 
 /**
+ * The process layer for Naming.
  *
  * @author Vasu V <vuppala@frib.msu.org>
  */
@@ -42,15 +39,18 @@ public class NamesEJB implements NamesEJBLocal {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    
+    // ToDo: Remove the injection. Not a good way to authorize.
     @Inject
     private UserManager userManager;
-    
     @PersistenceContext(unitName = "org.openepics.names.punit")
     private EntityManager em;
-    
-    private AuthServ authService = null; //* Authentication service
-   
+    // private AuthServ authService = null; //* Authentication service
+
+    /**
+     * Create a new event i.e. name creation, modification, deletion etc.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     public NameEvent createNewEvent(char eventType, String nameId, String category,
             String code, String description, String comment) throws Exception {
@@ -61,7 +61,7 @@ public class NamesEJB implements NamesEJBLocal {
             throw new Exception("userManager is null. Cannot inject it");
         }
 
-        if ( !userManager.isLoggedIn()) {
+        if (!userManager.isLoggedIn()) {
             throw new Exception("You are not authorized to perform this operation.");
         }
         //NameCategory ncat = new NameCategory(category, category,0);
@@ -85,10 +85,15 @@ public class NamesEJB implements NamesEJBLocal {
         logger.log(Level.INFO, "persisted...");
         return mEvent;
     }
-    
+
+    /**
+     * Publish a new release of the naming system.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     public NameRelease createNewRelease(NameRelease newRelease) throws Exception {
-        logger.log(Level.INFO, "creating release...");       
+        logger.log(Level.INFO, "creating release...");
 
         if (!userManager.isEditor()) {
             throw new Exception("You are not authorized to perform this operation.");
@@ -100,6 +105,11 @@ public class NamesEJB implements NamesEJBLocal {
         return newRelease;
     }
 
+    /**
+     * Find all events that are not processed yet
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getUnprocessedEvents() {
@@ -112,13 +122,13 @@ public class NamesEJB implements NamesEJBLocal {
     }
 
     /*
-     * Events that are approved, and are new ('i') or modified ('m').
+     * Get names that are approved, and are new ('i') or modified ('m').
      */
     @Override
-    public List<NameEvent> getValidNames() {       
-        return getStandardNames("%",false);
+    public List<NameEvent> getValidNames() {
+        return getStandardNames("%", false);
     }
-    
+
     /*
      * Is name being changed?
      */
@@ -131,11 +141,11 @@ public class NamesEJB implements NamesEJBLocal {
                 .setParameter("id", nevent.getNameId());
         nameEvents = query.getResultList();
         logger.log(Level.INFO, "change requests: " + nameEvents.size());
-        return ! nameEvents.isEmpty();
+        return !nameEvents.isEmpty();
     }
 
     /*
-     * Events that are approved, and are new ('i') or modified ('m').
+     * Get all requests of the current user
      */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
@@ -156,6 +166,11 @@ public class NamesEJB implements NamesEJBLocal {
         return nameEvents;
     }
 
+    /**
+     * Retrieve all event.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getAllEvents() {
@@ -167,6 +182,11 @@ public class NamesEJB implements NamesEJBLocal {
         return nameEvents;
     }
 
+    /**
+     * Retrieve all releases.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameRelease> getAllReleases() {
@@ -177,7 +197,12 @@ public class NamesEJB implements NamesEJBLocal {
         logger.log(Level.INFO, "Results for all events: " + releases.size());
         return releases;
     }
-    
+
+    /**
+     * Retrieve all events of a given name.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> findEventsByName(String nameId) {
@@ -190,6 +215,11 @@ public class NamesEJB implements NamesEJBLocal {
         return nameEvents;
     }
 
+    /**
+     * Find the latest event related to the given name.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public NameEvent findLatestEvent(String nameId) {
@@ -197,7 +227,7 @@ public class NamesEJB implements NamesEJBLocal {
 
         TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameId = :nameid  AND n.status != 'r' ORDER BY n.requestDate DESC", NameEvent.class)
                 .setParameter("nameid", nameId); // ToDo: convert to criteria query.      
-        nameEvents = query.getResultList();     
+        nameEvents = query.getResultList();
         // logger.log(Level.INFO, "Events for " + nameId + nameEvents.size());
         if (nameEvents.isEmpty()) {
             return null;
@@ -205,7 +235,15 @@ public class NamesEJB implements NamesEJBLocal {
             return nameEvents.get(0);
         }
     }
-    
+
+    /**
+     * Find events matching given criteria
+     *
+     * @param eventType an event type
+     * @param eventStatus event status
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> findEvents(char eventType, char eventStatus) {
@@ -213,38 +251,43 @@ public class NamesEJB implements NamesEJBLocal {
 
         String queryStr = "SELECT n FROM NameEvent n ";
         String cons = "";
-        
-        if (eventType != 0 ) {
+
+        if (eventType != 0) {
             cons += " n.eventType = '" + String.valueOf(eventType) + "' "; // ToDo: Bad idea! change to criteria query
         }
-        if (! "".equals(cons)) {
+        if (!"".equals(cons)) {
             cons += " AND ";
         }
         if (eventStatus != 0) {
             cons += " n.status = '" + String.valueOf(eventStatus) + "' "; // ToDo: Bad idea! change to criteria query
         }
 
-        if ( !"".equals(cons)) {
+        if (!"".equals(cons)) {
             queryStr += "WHERE " + cons;
-        }  
-        
+        }
+
         logger.log(Level.INFO, "Search query is: " + queryStr);
-        
+
         TypedQuery<NameEvent> query = em.createQuery(queryStr, NameEvent.class); // ToDo: convert to criteria query.  
-     
+
         nameEvents = query.getResultList();
-        logger.log(Level.INFO, "Search hits: "  + nameEvents.size());
+        logger.log(Level.INFO, "Search hits: " + nameEvents.size());
         return nameEvents;
     }
+
     /*
-     * Events that are approved, and are new ('i') or modified ('m').
+     * Get naming events matching the given criteria
+     * 
+     * @param category         Event category
+     * @param includeDeleted  .Don't discard deleted names.
+     * 
      */
     @Override
     // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
     public List<NameEvent> getStandardNames(String category, boolean includeDeleted) {
         List<NameEvent> nameEvents;
         TypedQuery<NameEvent> query;
-        
+
         //TypedQuery<NameEvent> query = em.createQuery("SELECT n FROM NameEvent n WHERE n.status = 'a' AND n.eventType IN (?1, ?2) AND n.nameCategoryId.id LIKE ?3 AND n.processDate <= (SELECT MAX(r.releaseDate) FROM NameRelease r) ORDER BY n.nameCategoryId.id, n.nameCode", NameEvent.class)
         if (includeDeleted) {
             query = em.createQuery("SELECT n FROM NameEvent n WHERE n.nameCategoryId.id LIKE :categ AND n.requestDate = (SELECT MAX(r.requestDate) FROM NameEvent r WHERE r.nameId = n.nameId AND (r.status = 'a' OR r.status = 'p')) ORDER BY n.nameCategoryId.id, n.nameCode", NameEvent.class)
@@ -259,6 +302,11 @@ public class NamesEJB implements NamesEJBLocal {
         return nameEvents;
     }
 
+    /**
+     * Update the status of a set of events.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     public void processEvents(NameEvent[] nevents, char status,
             String comment) throws Exception {
@@ -285,6 +333,11 @@ public class NamesEJB implements NamesEJBLocal {
         }
     }
 
+    /**
+     * Cancel a change request
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     public void cancelRequest(int eventId, String comment) throws Exception {
         NameEvent mEvent;
@@ -305,7 +358,12 @@ public class NamesEJB implements NamesEJBLocal {
         mEvent.setProcessedBy(userManager.getUser());
 
     }
-    
+
+    /**
+     * Is the current user an Editor?
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
     // TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public boolean isEditor(String user) {
@@ -318,79 +376,97 @@ public class NamesEJB implements NamesEJBLocal {
         }
     }
 
-    private int validate(String ticket) throws Exception {
-        findAuthService();
-
-        if (authService == null) {
-            logger.log(Level.WARNING, "Cannot access Auth Service.");
-            return -1; // ToDo: This is not good. Use exceptions.
-        }
-
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        AuthResponse resp;
-
-        params.add("ticket", ticket);
-
-        resp = authService.validate(params);
-
-        return resp.getStatus();
-    }
-    
+    /**
+     * Retrieve all the name categories
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
     @Override
-    public AuthResponse authenticate (String userid, String password) throws Exception {
-        AuthResponse response;
-        findAuthService();
+    public List<NameCategory> getCategories() {
+        List<NameCategory> cats;
 
-        if (authService == null) {
-            logger.log(Level.WARNING, "Cannot access Auth Service.");
-            return null; // ToDo: Use exceptions.
-        }
-        
-        // RequestContext context = RequestContext.getCurrentInstance(); 
-        // AuthServ auth = new AuthServ("http://qa01.hlc.nscl.msu.edu:8080/auth/rs/v0");
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();        
+        TypedQuery<NameCategory> query = em.createNamedQuery("NameCategory.findAll", NameCategory.class);
+        cats = query.getResultList();
+        logger.log(Level.INFO, "Total number of categories: " + cats.size());
 
-        params.add("user", userid);
-        params.add("password", password);
-        response = authService.authenticate(params);
-        password = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
-
-        return response;
+        return cats;
     }
 
-    private void findAuthService() throws Exception {
-        Properties prop = getProperties("AuthDomain"); // defined via JNDI
-        String serviceURL;
+    /*
+     private int validate(String ticket) throws Exception {
+     findAuthService();
 
-        if (prop == null || !"true".equals(prop.getProperty("Enabled"))) {
-            authService = null;
-            logger.log(Level.INFO, "Auth Domain not enabled or defined");
-            return;
-        }
+     if (authService == null) {
+     logger.log(Level.WARNING, "Cannot access Auth Service.");
+     return -1; // ToDo: This is not good. Use exceptions.
+     }
 
-        if (authService == null) {
-            serviceURL = prop.getProperty("ServiceURL");
-            if (serviceURL == null || serviceURL.isEmpty()) {
-                logger.log(Level.SEVERE, "ServiceURL not set");
-                authService = null;
-            } else {
-                authService = new AuthServ(serviceURL);
-            }
-        }
-    }
+     MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+     AuthResponse resp;
 
-    private Properties getProperties(String jndiName) throws Exception {
-        Properties properties;
+     params.add("ticket", ticket);
 
-        InitialContext context = new InitialContext();
-        properties = (Properties) context.lookup(jndiName);
-        context.close();
+     resp = authService.validate(params);
 
-        if (properties == null) {
-            logger.log(Level.SEVERE, "Error occurred while getting properties from JNDI.");
-        }
-
-        return properties;
-    }
+     return resp.getStatus();
+     }
     
+     @Override
+     public AuthResponse authenticate (String userid, String password) throws Exception {
+     AuthResponse response;
+     findAuthService();
+
+     if (authService == null) {
+     logger.log(Level.WARNING, "Cannot access Auth Service.");
+     return null; // ToDo: Use exceptions.
+     }
+        
+     // RequestContext context = RequestContext.getCurrentInstance(); 
+     // AuthServ auth = new AuthServ("http://qa01.hlc.nscl.msu.edu:8080/auth/rs/v0");
+     MultivaluedMap<String, String> params = new MultivaluedMapImpl();        
+
+     params.add("user", userid);
+     params.add("password", password);
+     response = authService.authenticate(params);
+     password = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
+
+     return response;
+     }
+
+     private void findAuthService() throws Exception {
+     Properties prop = getProperties("AuthDomain"); // defined via JNDI
+     String serviceURL;
+
+     if (prop == null || !"true".equals(prop.getProperty("Enabled"))) {
+     authService = null;
+     logger.log(Level.INFO, "Auth Domain not enabled or defined");
+     return;
+     }
+
+     if (authService == null) {
+     serviceURL = prop.getProperty("ServiceURL");
+     if (serviceURL == null || serviceURL.isEmpty()) {
+     logger.log(Level.SEVERE, "ServiceURL not set");
+     authService = null;
+     } else {
+     authService = new AuthServ(serviceURL);
+     }
+     }
+     }
+
+     private Properties getProperties(String jndiName) throws Exception {
+     Properties properties;
+
+     InitialContext context = new InitialContext();
+     properties = (Properties) context.lookup(jndiName);
+     context.close();
+
+     if (properties == null) {
+     logger.log(Level.SEVERE, "Error occurred while getting properties from JNDI.");
+     }
+
+     return properties;
+     }
+     *
+     */
 }

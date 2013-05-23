@@ -26,13 +26,13 @@
                 <p:submenu  label="Process">                                          
                     <p:menuitem value="Approve" icon="ui-icon-check" update=":ApproveForm" oncomplete="approveRequest.show()" title="Approve Request" />                                                         
                     <p:menuitem value="Reject"  icon="ui-icon-close" update=":RejectForm" oncomplete="rejectRequest.show()" title="Reject Request" />                                          
-                    <p:menuitem value="View" icon="ui-icon-search"  title="View History" actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />  
+                    <p:menuitem value="History" icon="ui-icon-search"  title="View History" actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />  
                 </p:submenu>
             </p:menu>
             <p:contextMenu for="requestTable">
                 <p:menuitem value="Approve" icon="ui-icon-check"  onclick="approveRequest.show()" />
                 <p:menuitem value="Reject" icon="ui-icon-close"  onclick="rejectRequest.show()" />
-                <p:menuitem value="View History" icon="ui-icon-search"  actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />                   
+                <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />                   
             </p:contextMenu>
             <p:dataTable id="requestTable" var="nevent" value="#{requestProcManager.events}" 
                          paginator="true" rows="50" resizableColumns="true"                                   

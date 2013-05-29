@@ -17,17 +17,6 @@
             <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
             <p:menuitem value="Browse" icon="ui-icon-arrow-4-diag" title="Browse All Names" url="names.xhtml"/>               
 
-            <!--
-            <p:submenu label="Category" icon="ui-icon-carat-2-e-w">
-                <p:menuitem value="Systems"  title="System Names" url="names.xhtml?category=system" />                              
-                <p:menuitem value="Subsystems"  title="Subsystem Names" url="names.xhtml?category=subsystem" /> 
-                <p:menuitem value="Devices" title="Device Type Names" url="names.xhtml?category=device-type" /> 
-                <p:menuitem value="Signal Types" title="Signal Type Names" url="names.xhtml?category=signal-type" />
-                <p:menuitem value="Signal Domains" title="Signal Domain Names" url="names.xhtml?category=signal-domain" />
-                <p:menuitem value="Signal Suffixes" title="Signal Suffix Names" url="names.xhtml?category=signal-suffix" />
-            </p:submenu>
-            -->
-
             <p:submenu label="Request" icon="ui-icon-comment">
                 <p:menuitem value="Submit Request" title="Submit a Change Request" 
                             url="request-sub.xhtml" icon="ui-icon-suitcase" 
@@ -50,6 +39,9 @@
 
             <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="preferences.xhtml" />
             <p:submenu label="Help" icon="ui-icon-help">
+                <p:menuitem value=" Online Help" title="Online Help" 
+                            icon="ui-icon-help" 
+                            url="help.xhtml" />
                 <p:menuitem value=" Naming Document" title="Latest Naming System Document"
                             icon="ui-icon-document" target="_blank"
                             url="#{publicationManager.latestRelease eq null? '/' : publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>

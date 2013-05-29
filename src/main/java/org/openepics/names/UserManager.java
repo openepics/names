@@ -16,6 +16,8 @@
 package org.openepics.names;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -33,6 +35,8 @@ public class UserManager implements Serializable {
 
     @EJB
     private NamesEJBLocal namesEJB;
+    private static final Logger logger = Logger.getLogger("org.openepics.names");
+    
     private String Ticket;
     private String User;
     private String inputUserID;
@@ -50,6 +54,15 @@ public class UserManager implements Serializable {
     public String onLogin() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        
+        // ToDo: find an alternative for this workaround
+        // Sometimes the user is already logged in. This is a workaround for it. 
+        try {
+            request.logout();
+        } catch (Exception e) {
+            logger.log(Level.INFO, "Cannot log out during login");
+        }
+        
         try {
             // resp = namesEJB.authenticate(inputUserID, inputPassword);
 

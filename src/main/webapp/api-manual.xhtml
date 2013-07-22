@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content">
+        <p:panel header="Online Help" styleClass="Help" >
+            <h:outputText value="Data in the Naming System can be accessed pogrammatically through a " /> 
+            <h:outputLink value="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</h:outputLink>
+            <h:outputText value="Application Programming Interface (API). The Naming System API follows"/>
+            <h:outputLink value="http://semver.org/">Semantic Versioning</h:outputLink> 
+            <h:outputText value="for its version numbers." />
+        </p:panel>
+        
+        A Name is a unique identifier for a component (device, rack, power-supply etc) in an Accelerator Facility. 
+        It is divided into several Name Parts (such as System Part, Device Part, and Signal Part). 
+        Each Name Part is further divided into Name Elements. For example, the System Part may have System and Sub-system as its elements. 
+        The Naming System manages Name Elements. There are several type or categories of Name Elements. 
+        Some examples of the Name Elements are: System, Sub-system, Device Type, Signal Type, and Signal Domain.
+        
+        A name goes through several phases in its life-cycle: 
+Inception: When a user requests for a new name
+Modification: When user requests for changes to a new name
+Retirement:  When a name is removed from the Naming System
+A name can be in the following states:
+Approved: It is approved for publication. Even though the name has not been published, it can be used.
+In Process or Awaiting Approval: A user has requested for a change, and the change is being processed. It is recommended not to use a name which is in this state.
+Published: The name is part of the current Naming Standard.
+Deleted: The name has been removed from the standard. A name in the state, obviously, must not be used.
+
+Many of the events in the life-cycle occur due to change requests from users.
+
+     Resources
+     
+     Name Element
+     
+    </ui:define>
+
+</ui:composition>

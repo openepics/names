@@ -19,13 +19,12 @@
                          rowStyleClass="#{namesManager.nameStatus(stdname)}"
                          style="width: 90%">
                 <f:facet name="header">
-                    <h:outputText value="Names" />                       
+                    <h:outputText value="Name Elements" />                       
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{namesManager.findHistory()}"   
                         update=":stdNameForm:historyTable" oncomplete="nameDetail.show()" />
 
-                <p:column id="nstatus"   style="width: 15%" 
-                          >                  
+                <p:column id="nstatus" style="width: 15%" sortBy="#{namesManager.nameStatus(stdname)}" >                  
                     <f:facet name="header">
                         <h:outputText value="Status" /> 
                         <br></br>

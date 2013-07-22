@@ -62,7 +62,7 @@
                     <h:outputText value="Submit Change Request" />                                                 
                 </f:facet>
 
-                <p:ajax event="rowSelectRadio" update=":ReqSubForm:reqMenu :ReqSubForm:cntxtMenu" />
+                <p:ajax event="rowSelectRadio" update=":ReqSubForm:reqMenu :ReqSubForm:cntxtMenu :ModNameForm:mpart"/>
                 <p:column selectionMode="single" style="width: 5%" />
 
                 <p:column id="status" headerText="Status" style="width: 9%" >                  
@@ -203,10 +203,10 @@
                         <p:column><h:outputLabel for="mpart" value="Category:" /></p:column>
                         <p:column><h:outputText value="#{requestManager.selectedName.nameCategoryId.name}" /></p:column>
                         <p:column>
-                            <p:selectOneMenu id="mpart" value="#{requestManager.newCategory}" >                             
+                            <h:selectOneMenu id="mpart" value="#{requestManager.newCategory}" >                             
                                 <f:selectItems value="#{menuManager.categories}" var="mcat"
-                                               itemValue="#{mcat.id}" itemLabel="#{mcat.name}" />
-                            </p:selectOneMenu> 
+                                               itemValue="#{mcat.id}" itemLabel="#{mcat.name}"  />
+                            </h:selectOneMenu> 
                         </p:column>
                     </p:row>
                     <p:row>
@@ -239,11 +239,11 @@
                 <p:watermark for="mcomm" value="Why do you want to change this name?" />
                 <p:separator />
 
-                <p:commandButton value="Submit" style="float: left"
+                <p:commandButton value="Submit" style="float: right"
                                  update=":ReqSubForm"                               
                                  oncomplete="modName.hide()"  
                                  action="#{requestManager.onModify()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
+                <p:commandButton  value="Cancel" style="float: left"
                                   onclick="modName.hide()"  />  
             </p:dialog>
         </h:form>

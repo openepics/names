@@ -22,16 +22,13 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import org.primefaces.component.menubar.Menubar;
 import org.primefaces.model.MenuModel;
 import org.primefaces.component.menuitem.MenuItem;
-import org.primefaces.component.submenu.Submenu;
 import org.primefaces.model.DefaultMenuModel;
 
 /**
  * For generating menu items for Naming Categories
- * 
+ *
  * @author Vasu V <vuppala@frib.msu.org>
  */
 @ManagedBean
@@ -42,9 +39,8 @@ public class MenuManager {
     private NamesEJBLocal namesEJB;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
     private MenuModel model;
-   
     private List<NameCategory> categories;
-    
+
     /**
      * Creates a new instance of MenuManager
      */
@@ -60,11 +56,17 @@ public class MenuManager {
         //submenu.setId("_category");
         //submenu.setLabel("Category");
         //submenu.setIcon("ui-icon-carat-2-e-w");
-        
+
+        //ToDo: Remove literal references to 'names.xhtml'. Use generic way.
+        MenuItem item = new MenuItem();
+        item.setId("_all");
+        item.setValue("All");
+        item.setUrl("/names.xhtml");
+        model.addMenuItem(item);
         // ToDo: Move to facelets, if possible
         for (NameCategory cat : categories) {
-            MenuItem item = new MenuItem();
-            item.setId("_"+cat.getId());           
+            item = new MenuItem();
+            item.setId("_" + cat.getId());
             item.setValue(cat.getName());
             item.setUrl("/names.xhtml?category=" + cat.getId());
             // submenu.getChildren().add(item);
@@ -77,7 +79,6 @@ public class MenuManager {
         // model.addSubmenu(submenu);
         // menubar.getChildren().add(1, submenu);       
     }
-  
 
     public List<NameCategory> getCategories() {
         return categories;
@@ -86,6 +87,4 @@ public class MenuManager {
     public MenuModel getModel() {
         return model;
     }
-    
-    
 }

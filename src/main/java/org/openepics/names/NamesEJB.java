@@ -276,10 +276,10 @@ public class NamesEJB implements NamesEJBLocal {
     }
 
     /*
-     * Get naming events matching the given criteria
+     * Get name elements that have been approved.
      * 
-     * @param category         Event category
-     * @param includeDeleted  .Don't discard deleted names.
+     * @param category         Restrict names to the given name-element category
+     * @param includeDeleted   Don't discard deleted name-elements.
      * 
      */
     @Override

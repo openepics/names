@@ -32,6 +32,10 @@
     /* vertical-align: top; */
 }
 
+.heading { 
+    text-align: left;   
+}
+
 .fixedPosition {
     position: fixed;
     right: 5%;
@@ -60,19 +64,16 @@
     /* background-color: #FFFFFF; */
 }
 
-.h1 {
-    font-size:  16px;
-    /* font-weight: bold; */
-    margin-bottom: 10px;
-    padding: 0px;
-    color: #086A87;
-    text-align: left;
+/* text wrap around in data table*/
+.ui-datatable td {
+   white-space: normal !important;
 }
 
 .para {
     margin-bottom: 10px;
     padding: 0px;
     text-align: left;
+    border: none;
 }
 .menubar {
     /* color: LightSlateGray; */
@@ -101,6 +102,8 @@
 }
 
 
+/*
+
 #top {
     position: relative;
     border: 1px;
@@ -116,7 +119,14 @@
     margin: 10px 0px 0px 0px;
 }
 
-/*
+.h1 {
+    font-size:  16px;   
+    margin-bottom: 10px;
+    padding: 0px;
+    color: #086A87;
+    text-align: left;
+}
+
 #content {
     text-align: left;
 }

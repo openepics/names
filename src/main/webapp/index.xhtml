@@ -8,8 +8,9 @@
                 xmlns:fc="http://java.sun.com/jsf/composite/comps">
 
     <ui:define name="content">
-
-        <p:panel  styleClass="para" style="border: none">
+        
+        <h2 class="heading">Introduction</h2>
+        <p:panel  styleClass="para">
             Format and syntax of the name components shall be as shown in the figure below. 
             Only the device name is required on drawings, name tags, etc. where the drawing or device name clearly 
             indicates the system and subsystem including the equipment. 
@@ -20,11 +21,9 @@
             <p:graphicImage value="resources/images/format.png"  />    
         </p:panel>
 
+        <h2 class="heading">Name Components</h2>
         <p:panelGrid style="text-align: left">  
             <f:facet name="header">  
-                <p:row>
-                    <p:column colspan="4">Name Components</p:column>
-                </p:row> 
                 <p:row>  
                     <p:column>Naming Part</p:column>  
                     <p:column>Description</p:column>  
@@ -53,18 +52,18 @@
                 <p:column>Names in <h:outputLink value="names.xhtml?category=subsystem">Table 5</h:outputLink> 
                     or IEEE 803 "Recommended Practice for Unique Identification in Power Plants and Related Facilities". 
                     Device type is required. Up to 4 characters. Devices in grey italics are reserved.</p:column>  
-                <p:column>Control Account Manager</p:column>  
+                <p:column>Control&nbsp;Account&nbsp;Manager</p:column>  
             </p:row>
             <p:row>  
                 <p:column>Q</p:column>  
                 <p:column>Qualifier</p:column>  
-                <p:column>Either "D" or "N" depending on the meaning of the following device instance number 
-                    (for beam line components: "D" for distance along beamline; for others: 
-                    "N" for sequential number). For each of the FRIB driver linac and ReA3, 
-                    the RFQ input is set to have D=1000 (i.e. 100 m). All beam line components upstream from the 
-                    RFQ input have D &lt; 1000, all downstream ones have D>1000. The fragment separator has D=1000 at 
-                    the production target. For Dual systems at the same distance, "D+1" can be used added to the 
-                    original distance.
+                <p:column>Either "D", "N" or “C” depending on the meaning of the following device instance 
+                    number (for beam line components: "D" for distance along beamline; for others: "N" for 
+                    sequential number, “C” is for Cryogenic Systems). For each of the FRIB driver linac 
+                    and ReA3, the RFQ input is set to have D=1000 (i.e. 100 m). All beam line 
+                    components upstream from the RFQ input have D &lt; 1000, all downstream ones have 
+                    D > 1000. The fragment separator has D=1000 at the production target. For Dual 
+                    systems at the same distance, “D+1” can be used added to the original distance.
                 </p:column>  
                 <p:column>Control Account Manager</p:column>  
             </p:row>
@@ -74,7 +73,8 @@
                 <p:column>Number as defined under Q (see above).  
                     If Q="N", the device instance should also be a number.  
                     Alphabetic characters subject to Controls Dept. 
-                    CAM approval. 4 characters mandatory.  </p:column>  
+                    CAM approval. 4 characters mandatory. If Q=”C” the device instance 
+                    should be a number 5 characters long.  </p:column>  
                 <p:column>Control Account Manager</p:column>  
             </p:row>
             <p:row>  
@@ -87,7 +87,7 @@
             <p:row>  
                 <p:column>XXXX</p:column>  
                 <p:column>Signal Domain </p:column>  
-                <p:column>Codes shown in <h:outputLink value="names.xhtml?category=signal-type">Table 7</h:outputLink>. 
+                <p:column>Codes shown in <h:outputLink value="names.xhtml?category=signal-domain">Table 7</h:outputLink>. 
                     Up to 4 characters.</p:column>  
                 <p:column>Lead Engineer</p:column>  
             </p:row>
@@ -97,7 +97,249 @@
                 <p:column>Use is optional. Up to 4 characters</p:column>  
                 <p:column>Lead Engineer</p:column>  
             </p:row>
-        </p:panelGrid>     
+        </p:panelGrid> 
+        
+        <h2 class="heading">Examples</h2>
+     
+        <p:panelGrid style="text-align: left">  
+            <f:facet name="header">                  
+                <p:row>  
+                    <p:column>Description</p:column>  
+                    <p:column>Name</p:column> 
+                    <p:column >Comment</p:column>
+                </p:row>  
+            </f:facet>  
+            <p:row>                   
+                <p:column colspan="3">
+                    For devices along the beamline, the device number is the distance along the beam line in decimeters. 
+                    Some devices may span all the Front end subsystems and therefore will appear as generic "Front end" devices.
+                </p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">   Examples:  </p:column>
+                <p:column>FE:CHLR_N2 </p:column> 
+                <p:column>Front End; Chiller 2</p:column>
+            </p:row><p:row>
+                <p:column>FE_CTL:IOC_N1 </p:column>
+                <p:column>Front End; IOC 1</p:column>
+            </p:row><p:row>
+                <p:column>
+                    Most devices are associated with particular subsystems, and follow the general guidelines.
+                    Example for a LEBT beamline device:</p:column>
+                <p:column>FE_LEBT:QVE_D0784 </p:column>
+                <p:column> LEBT Electrostatic vertical quadrupole</p:column>
+            </p:row><p:row>
+                <p:column>Read the current of a FC:</p:column>
+                <p:column>FE_LEBT:FC_D0123:I_RD </p:column>
+                <p:column></p:column>
+            </p:row> <p:row>
+                <p:column> Set the bias voltage (secondary electron suppression) on the same FC: </p:column>
+                <p:column>FE_LEBT:ELC_D0123:V_CSET</p:column><p:column></p:column>
+            </p:row><p:row>
+                <p:column>or, addressing the PS directly):</p:column>
+                <p:column>FE_LEBT:PS_D0123:V_CSET</p:column><p:column></p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">Put a diagnostic in the beam or take it out (fails out):</p:column>
+                <p:column>FE_LEBT:FC_D0912:IN_CMD </p:column><p:column> with value 1 (in)</p:column> 
+            </p:row> <p:row>
+                <p:column>FE_LEBT:FC_D0912:IN_CMD </p:column><p:column> with value 0 (out)</p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">Take a diagnostic out of the beam or put it in (fails in):</p:column>
+                <p:column>FE_LEBT:FC_D0912:OUT_CMD</p:column><p:column> with value 1 (in)</p:column>
+            </p:row><p:row>
+                <p:column>FE_LEBT:FC_D0912:OUT_CMD</p:column><p:column> with value 0 (out)</p:column>
+            </p:row><p:row>
+                <p:column  rowspan="2">Read if IN (or OUT) CMD on a diagnostic was accepted:</p:column>
+                <p:column>FE_LEBT:FC_D0912:IN_CSTS</p:column><p:column> value 1=in, value 0=out </p:column>
+            </p:row><p:row>
+                <p:column>FE_LEBT:FC_D0912:OUT_CSTS</p:column><p:column> value 1=out, value 0=in </p:column>
+            </p:row><p:row>
+                <p:column>Read actual diagnostics status (IN or OUT):</p:column>
+                <p:column>FE_LEBT:FC_D0912:IN_RSTS</p:column><p:column> value 1=in, value 0=out</p:column>
+            </p:row><p:row>
+                <p:column>Read diagnostic fault status (conflicting status):</p:column>
+                <p:column>FE_LEBT:FC_D0912:FLT_RSTS</p:column><p:column> value 1=in, value 0=out</p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">Read diagnostic individual limit status:</p:column>
+                <p:column>FE_LEBT:FC_D0912:LMIN_RSTS</p:column> <p:column>value 1=Limit Switch Closed, value 0=open</p:column>
+            </p:row><p:row>
+                <p:column>FE_LEBT:FC_D0912:LLMOUT_RSTS</p:column> <p:column>value 1=Limit Switch Closed, value 0=open</p:column>
+            </p:row><p:row>
+                <p:column>Racks on the HV platforms are allowed to follow the following naming scheme:</p:column>
+                <p:column>FE_SRC1:CAB_N0001 and FE_SRC2:CAB_N0001</p:column>
+                <p:column>whereas FE racks outside the HV platforms and cages will carry the C6FE_ designation.</p:column>
+            </p:row><p:row>
+                <p:column colspan="3">Examples of signals associated with various devices on Front End:</p:column>
+            </p:row><p:row>
+                <p:column rowspan="6">Analog Flow Meter</p:column>
+                <p:column>FE_LEBT:FE_D1001:F_RD </p:column><p:column>Analog Flow Readback</p:column>
+            </p:row><p:row>
+                <p:column>FE_LEBT:FE_D1001:LLIM_CSET </p:column><p:column>software Lower Limit Setpoint</p:column></p:row><p:row>
+                <p:column>FE_LEBT:FE_D1001:LLIM_RSET </p:column><p:column>Software Lower Limit Readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:FE_D1001:LLOK_RSTS_F </p:column><p:column>digital State of software limit</p:column></p:row><p:row>
+                <p:column>FE_LEBT:FE_D1001:LLLT_RSTS_F </p:column><p:column>digital Latch of software Limit</p:column></p:row><p:row>
+                <p:column>FE_LEBT:FE_D1001:OK_RSTS </p:column><p:column>status of digital flow switch in analog meter </p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">Flow Switch</p:column>
+                <p:column>FE_LEBT:FS_D1001:OK_RSTS </p:column><p:column>digital flow switch status ok </p:column></p:row><p:row>
+                <p:column>FE_LEBT:FS_D1001:LTCH_RSTS </p:column><p:column>digital flow switch Latched Bad</p:column>
+            </p:row><p:row>
+                <p:column rowspan="6">Target Ladder (stack of pneumatic cylinders with multiple devices or targets mounted)</p:column>
+                <p:column>FE_LEBT:TL_D1001:POS_CSET </p:column><p:column>integer, number position setpoint (1 through x)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:TL_D1001:POS_RSET </p:column><p:column>readback of Set position (integer)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:TL_D1001:POS_RD </p:column><p:column>numerical position readback (either potentiometer, or position)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:TL_D1001:FLT_RSTS </p:column><p:column>set vs read error</p:column></p:row><p:row>
+                <p:column>FE_LEBT:TL_D1001:POS_DESC_1 </p:column><p:column>String describing what is at position 1 “Out”</p:column></p:row><p:row>
+                <p:column>FE_LEBT:TL_D1001:POS_DESC_2 </p:column><p:column>String describing what is at position 2 “Wedge”</p:column>
+            </p:row><p:row>
+                <p:column rowspan="3">Pneumatic Actuator (May make up Target Ladder stack above)</p:column>
+                <p:column>FE_LEBT:PAC1_D1001:IN_CMD </p:column><p:column>digital in CMD</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PAC1_D1001:LMIN_RSTS </p:column><p:column>digital, IN limit sw engaged on 1st pneumatic actuator</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PAC2_D1001:LMOUT_RSTS </p:column><p:column>digital, OUT limit sw engaged on 2nd pneumatic actuator</p:column>
+            </p:row><p:row>
+                <p:column rowspan="10">Pirani Gauge</p:column>
+                <p:column>FE_LEBT:PG_D1001:VP_RD </p:column><p:column>Vacuum Pressure Readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:V_RD </p:column><p:column>Voltage Readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:OK_RSTS_VP </p:column><p:column>Vacuum digital trippoint OK</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:OK_RSTS_VP2 </p:column><p:column>2nd Vacuum digital trippoint OK</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:LLIM_CSET</p:column> <p:column>software Lower Limit Setpoint (Vacuum Pressure)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:LLIM_CSET_UNSC </p:column><p:column>software Lower Limit Setpoint (Raw Voltage)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:LLOK_RSTS_VP </p:column><p:column>digital state of software lower Limit OK (Vacuum Pressure)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:LLOK_RSTS_UNSC</p:column> <p:column>digital state of software lower Limit OK (Unscaled OK)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:OK_RSTS_VP </p:column><p:column>digital state of software lower Limit OK (VP OK)</p:column></p:row><p:row>
+                <p:column>FE_LEBT:PG_D1001:FLT_RSTS</p:column> <p:column>Fault, Bad voltage reading </p:column>
+            </p:row><p:row> 
+                <p:column rowspan="10">Device Drive (45 Degree Slit, motorized drive)</p:column>
+                <p:column>FE_LEBT:DD_D1001:LMPOS_RSTS </p:column><p:column>digital Positive Limit switch engaged</p:column></p:row><p:row>
+                <p:column>FE_LEBT:DD_D1001:LMNEG_RSTS </p:column><p:column>digital, Negative Limit Switch engaged</p:column></p:row><p:row>
+                <p:column>FE_LEBT:DD_D1001:ENPOS_RSTS </p:column><p:column>digital, Positive travel Enable</p:column></p:row><p:row>
+                <p:column>FE_LEBT:DD_D1001:ENNEG_RSTS </p:column><p:column>digital, Negative travel Enable</p:column></p:row><p:row>
+                <p:column>FE_LEBT:DD_D1001:POS_RD </p:column><p:column>analog position readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:DD_D1001:POS_CSET </p:column><p:column>analog command setpoint Slit Horizontal</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLH_D1001:POS_RD </p:column><p:column>analog position of center of slit readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLH_D1001:POS_CSET </p:column><p:column>analog position of center of slit setpoint</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLH_D1001:GAP_RD </p:column><p:column>analog position of gap of slit readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLH_D1001:GAP_CSET </p:column><p:column>analog position of gap of slit setpoint</p:column>
+            </p:row><p:row>
+                <p:column rowspan="6">Slit Left Drive (sub assembly of horizontal slits, user usually monitors SLH channels)</p:column>
+                <p:column>FE_LEBT:SLL_D1001:LMPOS_RSTS </p:column><p:column>digital Positive Limit switch engaged</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLL_D1001:LMNEG_RSTS </p:column><p:column>digital, Negative Limit Switch engaged</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLL_D1001:ENPOS_RSTS </p:column><p:column>digital, Positive travel Enable</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLL_D1001:ENNEG_RSTS </p:column><p:column>digital, Negative travel Enable</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLL_D1001:POS_RD </p:column><p:column>analog position readback</p:column></p:row><p:row>
+                <p:column>FE_LEBT:SLL_D1001:POS_CSET </p:column><p:column>analog command setpoint</p:column>
+            </p:row><p:row>
+                <p:column colspan="3">
+                    For devices along the beamline, the device number is the distance along the beam line in decimeters. 
+                    Cryomodules are numbered sequentially by type (CA01, CA02…; CB01, CB02 …). Currently, there are 7 
+                    production types in FRIB, ranging from A to G.
+                    The warm sections following the accelerating cryomodules follow the cryomodules numbering (WA01, 
+                    WA02…; WB01, WB02…). So CA01 is followed by WA01.
+                    Cavities, solenoids and phase detectors are numbered sequentially within a cryomodule (CAV1, CAV2, 
+                    CAV3, …; SOL1, SOL2,…; PHD1, PHD2, ….). The input gate valve will be GV1, the output gate valve GV2
+                    Beam Loss Monitors (BLM) go with the cryomodule or beam line name. </p:column>
+            </p:row><p:row>
+                <p:column>In any case, the number behind the qualifier in the device name will uniquely define this BLM.</p:column>
+                <p:column>MPS_CA01:BLM and MPS_BBS:BLM</p:column>
+                <p:column></p:column>
+            </p:row><p:row>
+                <p:column colspan="3">Examples for setting a cavity voltage: </p:column>
+            </p:row><p:row>
+                <p:column>Set the voltage in the first cavity of the first cryomodule in Linac Segment 1:</p:column>
+                <p:column>LS1_CA01:CAV1_D1093:V_CSET </p:column><p:column></p:column>
+            </p:row><p:row>   
+                <p:column>This same voltage may be set by addressing the LLRF via the name: </p:column>
+                <p:column>C6SB _LLRF:CAV1_D1093:V_CSET </p:column><p:column>(both will point to the same hardware address).</p:column>
+            </p:row><p:row>
+                <p:column>A loop gain for this same LLRF system may be read by the rf specialist using:</p:column>
+                <p:column>C6SB _LLRF:CAV1_D1093:G_RD</p:column><p:column></p:column>
+            </p:row><p:row>
+                <p:column>Set the current of the solenoid in the eleventh cryomodule in Linac Segment 3: </p:column>
+                <p:column>LS3_CD11:SOL1_D4712:I_CSET </p:column><p:column></p:column>
+            </p:row><p:row>
+                <p:column>This same current may be set by addressing the PS via the name:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:I_CSET </p:column><p:column>(both will point to the same hardware address).</p:column>
+            </p:row><p:row>
+                <p:column rowspan="2">Examples of commands:Switching a PS ON or OFF:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:ON_CMD </p:column><p:column>with value 1 (on)</p:column></p:row><p:row>
+                <p:column>C6SB_PS: PSOL_D4712:ON_CMD </p:column><p:column>with value 0 (off)</p:column>
+            </p:row><p:row>
+                <p:column>Reset a PS:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:RST_CMD</p:column><p:column> with value 1</p:column>
+            </p:row><p:row>
+                <p:column>Open or close a gate valve GV:</p:column>
+                <p:column>LS1_CB06:GV1_D1586:OPN_CMD </p:column><p:column>with value 1 (open)</p:column></p:row><p:row>
+                <p:column>LS1_CB06:GV1_D1586:OPN_CMD </p:column><p:column>with value 0 (close)</p:column>
+            </p:row><p:row>
+                <p:column colspan="3">Examples of reading status:</p:column>
+            </p:row><p:row>
+                <p:column>Read if ON (or OFF) CMD on a PS got accepted:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:ON_CSTS, </p:column><p:column>value 1=on, value 0=off </p:column>
+            </p:row><p:row>
+                <p:column>Read actual PS status (ON or OFF):</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:ON_RSTS, </p:column><p:column>value 1=on, value 0=off</p:column>
+            </p:row><p:row>
+                <p:column>Read if open (or close) CMD on a GV got accepted:</p:column>
+                <p:column>LS1_CB06:GV1_D1586:OPN_CSTS,</p:column><p:column> value 1=open, value 0=close </p:column>
+            </p:row><p:row>
+                <p:column>Read actual GV status (opened or closed):</p:column>
+                <p:column>LS1_CB06:GV1_D1586:OPN_RSTS, </p:column><p:column>value 1=opened, value 0=closed</p:column>
+            </p:row><p:row>
+                <p:column>Reading a complete status word, containing multiple status bits:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:MS_RD</p:column>
+                <p:column></p:column>
+            </p:row><p:row>
+                <p:column>Setting multiple control bits simultaneously:</p:column>
+                <p:column>C6SB_PS: PSOL_D4712:MC_CSET</p:column>
+                <p:column></p:column>
+            </p:row><p:row>
+                <p:column>An example of the usage of CM (cryomodule) device name is the case whereby several signals from a 
+                    cryomodule go to an IOC, which then creates one single interlock based on these signals (i.e. from the 
+                    outside this is interlock is seen as one pertaining to the entire cryomodules):</p:column>
+                <p:column>LS1_CA01:CM_D1105:ILK_RSTS</p:column>
+                <p:column></p:column>
+            </p:row><p:row>
+                <p:column colspan="3">
+                    Production target related devices will be named with FS_PTG as a system and sub-system name. Other 
+                    devices in target systems, such as remote handling related ones, will use TGT as a system name.
+                </p:column>
+            </p:row> <p:row>
+                <p:column colspan="3">
+                    Equipment and associated “Tag Names” should be named according to IEEE 803, IEEE Recommended 
+                    Practice for Unique Identification in Power Plants and Related Facilities, which references the Instrument 
+                    Society of America (ISA) Standard S5.1
+                    (“Instrumentation Symbols and Identification”). 
+                    Instance numbering for signals (loops) should be as follows:
+                    <ul>
+                        <li>Power, communication &amp; control systems: 0000 - 1999</li>
+                        <li>HVAC systems: 2000 - 3999</li>
+                        <li>Water systems: 4000 - 5999</li>
+                        <li>Gas systems: 6000 - 7999</li>
+                        <li>Waste systems: 8000 – 9999</li>
+                        <li>Cryo systems: 10000 – 99999</li>
+                    </ul>
+                </p:column></p:row><p:row>
+                <p:column rowspan="5">Examples of how cabinets/racks are to be named are given below:</p:column>
+                <p:column>C6SB_LLRF:CAB_N0001</p:column><p:column></p:column></p:row><p:row>
+                <p:column>C6SB_HPRF:CAB_N0001</p:column><p:column></p:column></p:row><p:row>
+                <p:column>C6SB_PS:CAB_N0001</p:column><p:column></p:column></p:row><p:row>
+                <p:column>C6SB_VAC:CAB_N0001</p:column><p:column></p:column></p:row><p:row>
+                <p:column>C6SB_DIAG:CAB_N0001</p:column><p:column></p:column>
+            </p:row><p:row>
+                <p:column colspan="3">In general, instruments will be named according to Instrument Society of America Standard S5.1 
+                    “Instrumentation Symbols and Identification”. Per this standard, instrument names will be instantiated by 
+                    loop numbers that are picked from blocks of
+                    numbers assigned to each subsystem of the Helium refrigeration system. Cryoline naming example:</p:column>
+            </p:row><p:row>
+                <p:column>Compressor 1 Pressure Reading</p:column>
+                <p:column>C6C4_MCS1:PT_C21101:P_RD</p:column>
+                <p:column></p:column>       
+            </p:row><p:row>
+                <p:column>
+                    An example of accessing properties of an IOC used by accelerator controls. This would allow one to read the IP address of this particular IOC</p:column>
+                <p:column>ACS_LIN:IOC_N4567:PROP_RD_IP</p:column>
+                <p:column></p:column>
+            </p:row>
+        </p:panelGrid>
     </ui:define>
 
 </ui:composition>

@@ -167,3 +167,5 @@ target/*
 
 # PDF. VV
 *.pdf
+# Enterprise Architect lock file. VV
+*.ldb

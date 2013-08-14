@@ -19,7 +19,7 @@
                          rowStyleClass="#{namesManager.nameStatus(stdname)}"
                          style="width: 90%">
                 <f:facet name="header">
-                    <h:outputText value="Name Elements" />                       
+                    <h:outputText value="#{msgs.nameElement}" />                       
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{namesManager.findHistory()}"   
                         update=":stdNameForm:historyTable" oncomplete="nameDetail.show()" />
@@ -43,7 +43,7 @@
                           style="width: 15%" > 
                     <f:facet name="header">
                         <!--ToDo: Move it to the menubar, if possible-->
-                        <p:menuButton model="#{menuManager.model}"  value="Category"/>                      
+                        <p:menuButton model="#{menuManager.model}"  value="#{msgs.nameElementCategory}"/>                      
                     </f:facet>
                     <h:outputText value="#{stdname.nameCategoryId.id}" /> 
                     

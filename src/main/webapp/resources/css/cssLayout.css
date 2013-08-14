@@ -102,6 +102,22 @@
 }
 
 
+#bottom {
+    position: relative;
+    display: block;
+    background-color: #FFFFFF;
+    color: LightSlateGray;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+}
+
+#top {
+    position: relative;
+    border: 1px;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
 /*
 
 #top {

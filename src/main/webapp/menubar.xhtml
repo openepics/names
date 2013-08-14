@@ -6,13 +6,15 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fc="http://java.sun.com/jsf/composite/comps"
     xmlns:h="http://java.sun.com/jsf/html">
 
     <h:form id="menuform">
         <p:growl id="menumsgs" />
         <ui:include src="about.xhtml" />
-        <ui:include src="login.xhtml" />
-
+        <fc:logincomp display="false" updates=":menuform:mainMenu"/>
+        
+        
         <p:menubar id="mainMenu" >
             <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
             <p:menuitem value="Browse" icon="ui-icon-arrow-4-diag" title="Browse All Names" url="names.xhtml"/>               
@@ -38,10 +40,16 @@
             </p:submenu>
 
             <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="preferences.xhtml" />
+            
+            <!-- p:menuitem value="login" title="Login"  icon="ui-icon-gear" url="login.xhtml" / -->
+            
             <p:submenu label="Help" icon="ui-icon-help">
                 <p:menuitem value=" Online Help" title="Online Help" 
                             icon="ui-icon-help" 
                             url="help.xhtml" />
+                <p:menuitem value=" API Manual" title="API Manual" 
+                            icon="ui-icon-script" 
+                            url="api-manual.xhtml" />
                 <p:menuitem value=" Naming Document" title="Latest Naming System Document"
                             icon="ui-icon-document" target="_blank"
                             url="#{publicationManager.latestRelease eq null? '/' : publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>
@@ -56,12 +64,14 @@
             <f:facet name="options">  
                 <h:outputText value="#{userManager.user}" style="margin-right:10px" rendered="#{userManager.loggedIn}" />  
                 <p:commandButton id="loginBtn" type="button" value="Login" 
-                                 icon="ui-icon-person" update=":menuform:loginDialog" 
-                                 onclick="loginWidget.show()" rendered="#{not userManager.loggedIn}" />
+                                 icon="ui-icon-person" 
+                                 onclick="loginWidget.show()" rendered="#{not userManager.loggedIn}">
+                    <f:param value="Y" name="doAuthenticate" />
+                </p:commandButton>
                 <p:commandButton id="logoutBtn" value="Logout" 
-                                 icon="ui-icon-person" update=":manageName:namesform:nameTable :menuform:mainMenu :menuform:menumsgs" 
-                                 action="#{userManager.onLogout}" 
-                                 rendered="#{userManager.loggedIn}" ajax="false"/>              
+                                 icon="ui-icon-person" update=":menuform:mainMenu :menuform:menumsgs" 
+                                 action="#{loginManager.onLogout()}"  immediate="true"
+                                 rendered="#{userManager.loggedIn}" />              
             </f:facet>
 
         </p:menubar>

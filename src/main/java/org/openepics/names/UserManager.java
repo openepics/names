@@ -15,7 +15,9 @@
  */
 package org.openepics.names;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -23,6 +25,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -36,12 +40,7 @@ public class UserManager implements Serializable {
     @EJB
     private NamesEJBLocal namesEJB;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    
-    private String Ticket;
     private String User;
-    private String inputUserID;
-    private String inputPassword;
-    private String Role;
     private boolean LoggedIn = false;
     private boolean Editor = false;
 
@@ -51,10 +50,28 @@ public class UserManager implements Serializable {
     public UserManager() {
     }
 
-    public String onLogin() {
+    public void init() {
+        Principal principal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+        if (principal == null) {
+            User = "";
+            LoggedIn = false;
+            Editor = false;
+        } else {
+            User = principal.getName();
+            LoggedIn = true;
+            Editor = namesEJB.isEditor(User);
+        }
+    }
+
+    /*
+    public String onLogin() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        
+        String originalURL = (String) context.getExternalContext().getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
+
+        if (originalURL == null) {
+            originalURL = "index.xhtml";
+        }
         // ToDo: find an alternative for this workaround
         // Sometimes the user is already logged in. This is a workaround for it. 
         try {
@@ -62,7 +79,7 @@ public class UserManager implements Serializable {
         } catch (Exception e) {
             logger.log(Level.INFO, "Cannot log out during login");
         }
-        
+
         try {
             // resp = namesEJB.authenticate(inputUserID, inputPassword);
 
@@ -72,8 +89,8 @@ public class UserManager implements Serializable {
             User = inputUserID;
             Editor = namesEJB.isEditor(User);
             showMessage(FacesMessage.SEVERITY_INFO, "You are logged in. Welcome to Proteus.", inputUserID);
-
-        } catch (Exception e) {
+            context.getExternalContext().redirect(originalURL);
+        } catch (ServletException e) {
             Ticket = null;
             LoggedIn = false;
             User = null;
@@ -101,71 +118,8 @@ public class UserManager implements Serializable {
 
         return "/index.xhtml";
     }
-
-//    public String onLogin() {
-//        AuthResponse resp;
-//
-//        try {
-//            resp = namesEJB.authenticate(inputUserID, inputPassword);
-//            inputPassword = "xxxxxxxx"; // ToDo implement a better way destroy the password (from JVM)
-//            if (resp == null) {
-//                showMessage(FacesMessage.SEVERITY_ERROR, "This is embarassing; cannot authenticate you.", "Most probably authenticate service is not configured.");
-//            }
-//            if (resp.getStatus() == 0) {
-//                Ticket = resp.getTicket();
-//                LoggedIn = true;
-//                User = inputUserID;
-//                Editor = namesEJB.isEditor(User);
-//                showMessage(FacesMessage.SEVERITY_INFO, "You are logged in. Welcome to Proteus.", inputUserID);
-//            } else {
-//                Ticket = null;
-//                LoggedIn = false;
-//                User = null;
-//                Editor = false;
-//                showMessage(FacesMessage.SEVERITY_ERROR, "Login Failed! Please try again. ", "Status: " + resp.getStatus());
-//            }
-//        } catch (Exception e) {
-//        } finally {
-//        }
-//        return null;
-//    }
-//
-//    public String onLogout() {
-//        LoggedIn = false;
-//        Ticket = "";
-//        inputUserID = "";
-//        Editor = false;
-//        showMessage(FacesMessage.SEVERITY_INFO, "You have been logged out.", "Thank you!");
-//        return null;
-//    }
-    public String getTicket() {
-        return Ticket;
-    }
-
-    public String getRole() {
-        return Role;
-    }
-
-    public void setRole(String Role) {
-        this.Role = Role;
-    }
-
-    public String getInputUserID() {
-        return inputUserID;
-    }
-
-    public void setInputUserID(String inputUserID) {
-        this.inputUserID = inputUserID;
-    }
-
-    public String getInputPassword() {
-        return inputPassword;
-    }
-
-    public void setInputPassword(String inputPassword) {
-        this.inputPassword = inputPassword;
-    }
-
+*/
+    
     public String getUser() {
         return User;
     }
@@ -183,6 +137,6 @@ public class UserManager implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         context.addMessage(null, new FacesMessage(severity, summary, message));
-        FacesMessage n = new FacesMessage();
+        // FacesMessage n = new FacesMessage();
     }
 }

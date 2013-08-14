@@ -54,8 +54,8 @@ public class ReportManager implements Serializable {
         try {
             logger.log(Level.INFO, "Action: generating report");
             // System.out.println("Action: generating report");
-            char etype = eventType == null ? 0 : eventType.charAt(0);
-            char estat = eventStatus == null ? 0 : eventStatus.charAt(0);
+            char etype = "%".equals(eventType)? 0 : eventType.charAt(0);
+            char estat = "%".equals(eventStatus)? 0 : eventStatus.charAt(0);
             events = namesEJB.findEvents(etype, estat);
         } catch (Exception e) {
             System.err.println(e);

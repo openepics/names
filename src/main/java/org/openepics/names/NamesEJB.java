@@ -255,10 +255,11 @@ public class NamesEJB implements NamesEJBLocal {
         if (eventType != 0) {
             cons += " n.eventType = '" + String.valueOf(eventType) + "' "; // ToDo: Bad idea! change to criteria query
         }
-        if (!"".equals(cons)) {
-            cons += " AND ";
-        }
+        
         if (eventStatus != 0) {
+            if (!"".equals(cons)) {
+                cons += " AND ";
+            }
             cons += " n.status = '" + String.valueOf(eventStatus) + "' "; // ToDo: Bad idea! change to criteria query
         }
 

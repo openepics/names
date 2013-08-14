@@ -19,7 +19,7 @@
         <div id="full" class="boxf">
             <div id="top" class="box">
                 <p:panel styleClass="Logo">
-                    <h:outputText value="Proteus: Naming System"  styleClass="title"/>
+                    <h:outputText value="#{msgs.title}"  styleClass="title"/>
                     <h:panelGroup style="float:  right; font-size:  x-small">
                         <h:outputText value="Release: #{publicationManager.latestRelease eq null? 'None' : publicationManager.latestRelease.id} " />                    
                         <h:outputText value="#{publicationManager.latestRelease eq null? ' ': publicationManager.latestRelease.releaseDate}">                    

@@ -31,8 +31,7 @@ public class NameElementCategoryResource {
     @EJB
     private NamesEJBLocal namesEJB;
 
-    @GET
-    
+    @GET    
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
     public List<NameCategory> findAll() {
         return namesEJB.getCategories();

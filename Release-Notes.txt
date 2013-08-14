@@ -6,13 +6,19 @@ Release Notes: Naming System Application
 
 Overview: Naming System is for managing the FRIB Naming Convention. 
 
-Naming System Version 2.4.0  Date: 2013-Jul-02
+Naming System Version 2.4.0  Date: 2013-Aug-02
 
 Summary of Changes from Previous Version:
   - RESTful API 
-  - Changes in GUI 
+  - Changes in GUI: categories moved in browsing mode
   - Fixed AUTO_INCREMENT bug
+  - changed how authorization works
 
+  Known Issues:
+  - In browse mode, selecting or deselecting 'Delete' refreshes the view
+  - When modifying a request, everthing has to be re-entered inclduing category
+  - 'Request' submenu blocks the 'logoff' button
+  
 Naming System Version 2.3  Date: 2013-May-24
 
 Summary of Changes from Previous Version:

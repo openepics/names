@@ -16,35 +16,31 @@
         <p:panelGrid>  
             <f:facet name="header">  
                 <p:row>
-                    <p:column colspan="2">Proteus Naming System</p:column>
+                    <p:column colspan="2">#{msgs.title}</p:column>
                 </p:row>   
             </f:facet>  
             <p:row>  
                 <p:column>Version</p:column>  
-                <p:column>2.4.0</p:column>    
+                <p:column>#{msgs.version}</p:column>    
             </p:row> 
             <p:row>  
                 <p:column>Schema Version</p:column>  
-                <p:column>2.3</p:column>    
+                <p:column>#{msgs.dbversion}</p:column>    
             </p:row>
             <p:row>  
                 <p:column>API Version</p:column>  
-                <p:column>0.1.0</p:column>    
+                <p:column>#{msgs.apiversion}</p:column>    
             </p:row>
             <p:row>  
-                <p:column>Naming System</p:column>  
-                <p:column>Kelly Davidson, Sheng Peng, Eugene Tanke, Mathias Steiner</p:column>    
-            </p:row>           
-            <p:row>  
-                <p:column>Development Team</p:column>  
-                <p:column>Vasu Vuppala</p:column>    
-            </p:row>
+                <p:column>Team</p:column>  
+                <p:column>${msgs.devTeam}</p:column>    
+            </p:row>                      
             <p:row>  
                 <p:column>Support </p:column>  
-                <p:column>Send Email to <a href="mailto:vuppala@frib.msu.edu?Subject=Proteus-Naming-System">Support Team</a></p:column>    
+                <p:column>Send Email to <a href="mailto:#{msgs.supportEmail}?Subject=Proteus-Naming-System">Support Team</a></p:column>    
             </p:row>
             <p:row>
-                <p:column colspan="2" style="text-align: center; font-weight: bold">Developed by DISCS Collaboration</p:column>
+                <p:column colspan="2" style="text-align: center; font-weight: bold">#{msgs.tagline}</p:column>
             </p:row>
         </p:panelGrid>
     </p:overlayPanel>

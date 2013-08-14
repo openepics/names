@@ -15,6 +15,7 @@
  */
 package org.openepics.names;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ import org.primefaces.model.DefaultMenuModel;
  */
 @ManagedBean
 @ViewScoped
-public class MenuManager {
+public class MenuManager implements Serializable {
 
     @EJB
     private NamesEJBLocal namesEJB;

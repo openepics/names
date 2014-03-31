@@ -17,12 +17,14 @@ package org.openepics.names;
 
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 /**
@@ -36,13 +38,17 @@ public class ReportManager implements Serializable {
 
     @EJB
     private NamesEJBLocal namesEJB;
+    @ManagedProperty(value = "#{publicationManager}")
+    private PublicationManager pubManager;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
     private List<NameEvent> events;
+    //private List<NameEvent> standardNames;
     // Search Parameters
     private String eventType;
     private String eventStatus;
     private Date startDate, endDate;
-    private String startRev, endRev;
+    // private String startRev, endRev;   
+    private NameRelease inRelease;
 
     /**
      * Creates a new instance of ReportManager
@@ -60,11 +66,42 @@ public class ReportManager implements Serializable {
         } catch (Exception e) {
             System.err.println(e);
         } finally {
-            eventType = eventStatus = startRev = endRev = null;
+            eventType = eventStatus = null;
+            // eventType = eventStatus = startRev = endRev = null;
             startDate = endDate = null;
         }
     }
 
+    public void genPublishedReport() {
+        List<NameEvent> stdnames;
+        try {
+            if (events == null) {
+                events = new ArrayList<NameEvent>();
+            } else {
+                events.clear();
+            }           
+
+            logger.log(Level.INFO, "Action: generating published report");
+            // System.out.println("Action: generating report");
+            stdnames = namesEJB.getStandardNames("%", false);
+            for (NameEvent nreq : stdnames) {
+                if (nreq.getProcessDate() != null
+                        && nreq.getProcessDate().before(inRelease.getReleaseDate())
+                        && nreq.getStatus() == 'a' && nreq.getEventType() != 'd') {
+                    // it is published
+                    events.add(nreq);
+                } 
+            }
+            
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            eventType = eventStatus = null;
+            //eventType = eventStatus = startRev = endRev = null;
+            startDate = endDate = null;
+        }
+    }
+    
     public List<NameEvent> getEvents() {
         return events;
     }
@@ -109,19 +146,17 @@ public class ReportManager implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getStartRev() {
-        return startRev;
+    public NameRelease getInRelease() {
+        return inRelease;
     }
 
-    public void setStartRev(String startRev) {
-        this.startRev = startRev;
+    public void setInRelease(NameRelease inRelease) {
+        this.inRelease = inRelease;
     }
 
-    public String getEndRev() {
-        return endRev;
+   
+    public void setPubManager(PublicationManager pubMgr) {
+        this.pubManager = pubMgr;
     }
 
-    public void setEndRev(String endRev) {
-        this.endRev = endRev;
-    }
 }

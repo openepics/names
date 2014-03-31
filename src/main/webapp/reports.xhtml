@@ -8,68 +8,97 @@
                 >
 
     <ui:define name="content">
-        
+
         <h:form id="RepParamForm"> 
             <p:growl id="requestMsgs" showDetail="true" life="5000" /> 
-            <p:panelGrid >
-                <f:facet name="header">
-                    <p:row>
-                        <p:column colspan="3">
-                            Query Options   
-                        </p:column>
-                    </p:row>
-                </f:facet>
-                <p:row>
-                    <p:column><h:outputLabel for="status" value="Request Status" /></p:column>
-                    <p:column>                        
-                        <p:selectOneMenu id="status" value="#{reportManager.eventStatus}"  >
-                            <f:selectItem itemLabel="Any" itemValue="%" />  
-                            <f:selectItem itemLabel="Approved" itemValue="a" />  
-                            <f:selectItem itemLabel="Being Processed" itemValue="p" />  
-                            <f:selectItem itemLabel="Cancelled" itemValue="c" />  
-                            <f:selectItem itemLabel="Rejected" itemValue="r" />                          
-                        </p:selectOneMenu>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column><h:outputLabel for="etype" value="Request Type" /></p:column>               
-                    <p:column>                        
-                        <p:selectOneMenu id="etype" value="#{reportManager.eventType}">
-                            <f:selectItem itemLabel="Any" itemValue="%" />  
-                            <f:selectItem itemLabel="Add Name" itemValue="i" />  
-                            <f:selectItem itemLabel="Delete Name" itemValue="d" />  
-                            <f:selectItem itemLabel="Modify Name" itemValue="m" />                                                 
-                        </p:selectOneMenu>
-                    </p:column>
-                </p:row>
-                <p:row rendered="false">
-                    <p:column>Request Period</p:column>
-                    <p:column><p:calendar  id="sdate" showOn="button" value="#{reportManager.startDate}"  disabled="true" /> </p:column>
-                    <p:column><p:calendar  id="edate" showOn="button" value="#{reportManager.endDate}" disabled="true" /> </p:column>
-                </p:row>
-                <p:row rendered="false">
-                    <p:column>Revision Period</p:column>
-                    <p:column> 
-                        <p:selectOneMenu id="srev" value="#{reportManager.startRev}"  >
-                            <f:selectItem itemLabel="Any" itemValue="%" />  
-                            <f:selectItem itemLabel="R003" itemValue="a" />                                                      
-                        </p:selectOneMenu>
-                    </p:column>
-                    <p:column> 
-                        <p:selectOneMenu id="erev" value="#{reportManager.endRev}"  >
-                            <f:selectItem itemLabel="Any" itemValue="%" />  
-                            <f:selectItem itemLabel="R003" itemValue="a" />                                                      
-                        </p:selectOneMenu>
-                    </p:column>
-                </p:row>
-            </p:panelGrid>
-            <p:commandButton id="repButton" value="Generate"  action="#{reportManager.onGenReport}"
-                             update=":RepDataForm:reportTable" onclick="reportPnl.show()" />
-            <p:blockUI block=":RepDataForm:reportPnl" trigger="repButton" >          
-                <p:graphicImage value="/resources/images/ajax-loader.gif" style="background-color: transparent" />  
-            </p:blockUI>
+            <p:tabView >
+                <p:tab title="Published">
+                    <p:panelGrid >
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column colspan="3">
+                                    Published Name Elements   
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+
+                        <p:row rendered="true">
+                            <p:column>Select Release</p:column>
+                            <p:column> 
+                                <p:selectOneMenu id="irevision" value="#{reportManager.inRelease}" 
+                                                 var="pub"  converter="#{nameReleaseConverter}">
+                                    <f:selectItems value="#{publicationManager.releases}" var="rel" itemLabel="#{rel.id}" itemValue="#{rel}" />  
+                                    <p:column>  
+                                        #{pub.id}
+                                    </p:column>    
+                                    <p:column>  
+                                        #{pub.description}
+                                    </p:column> 
+                                    <p:column> 
+                                        <h:outputText value="#{pub.releaseDate}">
+                                            <f:convertDateTime pattern="dd-MMM-yyyy, HH:mm"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:selectOneMenu>
+                            </p:column>
+
+                        </p:row>
+                    </p:panelGrid>
+                    <p:commandButton id="genPubRep" value="Generate"  action="#{reportManager.genPublishedReport}"
+                                     update=":PubRepForm:reportTable" onclick="pubReportPnl.show()" />
+                    <p:blockUI block=":PubRepForm:reportPnl" trigger="genPubRep" >          
+                        <p:graphicImage value="/resources/images/ajax-loader.gif" style="background-color: transparent" />  
+                    </p:blockUI>
+                </p:tab>
+
+                <p:tab title="Name Changes">
+                    <p:panelGrid >
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column colspan="3">
+                                    Name Changes   
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column><h:outputLabel for="status" value="Request Status" /></p:column>
+                            <p:column>                        
+                                <p:selectOneMenu id="status" value="#{reportManager.eventStatus}"  >
+                                    <f:selectItem itemLabel="Any" itemValue="%" />  
+                                    <f:selectItem itemLabel="Approved" itemValue="a" />  
+                                    <f:selectItem itemLabel="Being Processed" itemValue="p" />  
+                                    <f:selectItem itemLabel="Cancelled" itemValue="c" />  
+                                    <f:selectItem itemLabel="Rejected" itemValue="r" />                          
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column><h:outputLabel for="etype" value="Request Type" /></p:column>               
+                            <p:column>                        
+                                <p:selectOneMenu id="etype" value="#{reportManager.eventType}">
+                                    <f:selectItem itemLabel="Any" itemValue="%" />  
+                                    <f:selectItem itemLabel="Add Name" itemValue="i" />  
+                                    <f:selectItem itemLabel="Delete Name" itemValue="d" />  
+                                    <f:selectItem itemLabel="Modify Name" itemValue="m" />                                                 
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row rendered="false">
+                            <p:column>Request Period</p:column>
+                            <p:column><p:calendar  id="sdate" showOn="button" value="#{reportManager.startDate}"  disabled="true" /> </p:column>
+                            <p:column><p:calendar  id="edate" showOn="button" value="#{reportManager.endDate}" disabled="true" /> </p:column>
+                        </p:row>
+                        
+                    </p:panelGrid>
+                    <p:commandButton id="repButton" value="Generate"  action="#{reportManager.onGenReport}"
+                                     update=":RepDataForm:reportTable" onclick="reportPnl.show()" />
+                    <p:blockUI block=":RepDataForm:reportPnl" trigger="repButton" >          
+                        <p:graphicImage value="/resources/images/ajax-loader.gif" style="background-color: transparent" />  
+                    </p:blockUI>
+                </p:tab>
+            </p:tabView>
         </h:form>
-        
+
         <h:form id="RepDataForm">
             <p:dialog id="reportPnl" widgetVar="reportPnl" width="900"  dynamic="true"
                       maximizable="true" minimizable="true"  >
@@ -153,6 +182,71 @@
                 </p:panel>
             </p:dialog>
         </h:form>
-        
+
+        <h:form id="PubRepForm">
+            <p:dialog id="reportPnl" widgetVar="pubReportPnl" width="900"  dynamic="true"
+                      maximizable="true" minimizable="true"  >
+                <f:facet name="header">
+                    <h:outputText value="Report" />                    
+                </f:facet>
+                <f:facet name="footer">                   
+                </f:facet>
+                <p:dataTable id="reportTable" var="nevent" value="#{reportManager.events}" 
+                             paginator="false"  resizableColumns="true"                                   
+                             scrollable="true"  scrollHeight="600" rowKey="#{nevent.id}"                       
+                             emptyMessage="There are no names matching your criteria."                         
+                             style="width: 100%">                 
+
+                    <p:column id="id" headerText="Id" sortBy="#{nevent.id}" style="width: 5%" rendered="false" >                  
+                        <h:outputText value="#{nevent.id}" />                              
+                    </p:column>
+
+                    <p:column id="nameCat" headerText="Category" sortBy="#{nevent.nameCategoryId.id}" width="15%" >                  
+                        <h:outputText value="#{nevent.nameCategoryId.id}" />                              
+                    </p:column>
+                    <p:column id="nameCode" headerText="Name" sortBy="#{nevent.nameCode}" width="15%" >                  
+                        <h:outputText value="#{nevent.nameCode}" />                              
+                    </p:column>              
+                    <p:column id="nameDesc" headerText="Description" >                  
+                        <h:outputText value="#{nevent.nameDescription}" />                              
+                    </p:column>
+
+                    <p:column id="reqComment" headerText="Comment"  rendered="false">                  
+                        <h:outputText value="#{nevent.requestorComment}" />                              
+                    </p:column> 
+                    <p:column id="status" headerText="Status"  rendered="false" >                  
+                        <h:outputText value="#{namesManager.nameStatus(nevent)}" title="status"/>                              
+                    </p:column>
+
+                    <p:column id="procDate" headerText="Proc Date"  rendered="false">                  
+                        <h:outputText value="#{nevent.processDate}" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:outputText>
+                    </p:column>            
+
+                </p:dataTable>
+                <p:panel rendered="true">  
+                    <h:commandLink >  
+                        <p:graphicImage value="resources/images/excel.png" />                      
+                        <p:dataExporter type="xls"  target="reportTable" fileName="proteus-report" />  
+                    </h:commandLink>  
+
+                    <h:commandLink>  
+                        <p:graphicImage value="resources/images/pdf.png" />  
+                        <p:dataExporter type="pdf" target="reportTable" fileName="proteus-report" />  
+                    </h:commandLink>  
+
+                    <h:commandLink>  
+                        <p:graphicImage value="resources/images/csv.png" />  
+                        <p:dataExporter type="csv" target="reportTable" fileName="proteus-report"  /> 
+                    </h:commandLink>  
+
+                    <h:commandLink>  
+                        <p:graphicImage value="resources/images/xml.png" />  
+                        <p:dataExporter type="xml" target="nameTable" fileName="proteus-report" />  
+                    </h:commandLink>  
+                </p:panel>
+            </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>

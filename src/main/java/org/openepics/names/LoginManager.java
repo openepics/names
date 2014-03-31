@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -33,8 +34,8 @@ public class LoginManager implements Serializable {
     @Inject private UserManager userManager;
     
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    private String inputUserID;
-    private String inputPassword;
+    @NotNull private String inputUserID;
+    @NotNull private String inputPassword;
     private String originalURL;
 
     /**

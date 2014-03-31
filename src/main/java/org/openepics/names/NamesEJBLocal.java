@@ -25,22 +25,40 @@ import javax.ejb.Local;
  */
 @Local
 public interface NamesEJBLocal {
+
     public boolean isEditor(String user);
+
     public List<NameEvent> getAllEvents();
+
     public void processEvents(NameEvent[] nevents, char status, String comment) throws Exception;
-    public NameEvent createNewEvent(char eventType, String nameId, String category, 
-              String code, String desription, String comment) throws Exception ;
+
+    public NameEvent createNewEvent(char eventType, String nameId, String category,
+            String code, String desription, String comment) throws Exception;
+
     public List<NameEvent> getUnprocessedEvents();
-    public List<NameEvent> getStandardNames(String category, boolean includeDeleted);    
+
+    public List<NameEvent> getStandardNames(String category, boolean includeDeleted);
+
     public List<NameEvent> findEventsByName(String nameId);
+
     public List<NameEvent> getUserRequests();
+
     public List<NameEvent> getValidNames();
+
     public void cancelRequest(int eventId, String comment) throws Exception;
+
     public List<NameEvent> findEvents(char eventType, char eventStatus);
+
     public List<NameRelease> getAllReleases();
+
     public NameRelease createNewRelease(NameRelease newRelease) throws Exception;
+
     public boolean isUnderChange(NameEvent nevent);
+
     public NameEvent findLatestEvent(String nameId);
+
     // public AuthResponse authenticate(String userid, String password) throws Exception;
     public List<NameCategory> getCategories();
+
+    NameRelease findRelease(String id);
 }

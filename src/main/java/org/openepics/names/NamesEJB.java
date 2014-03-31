@@ -197,6 +197,17 @@ public class NamesEJB implements NamesEJBLocal {
         logger.log(Level.INFO, "Results for all events: " + releases.size());
         return releases;
     }
+    
+    /**
+     * Retrieve all releases.
+     *
+     * @author Vasu V <vuppala@frib.msu.org>
+     */
+    @Override
+    // @TransactionAttribute(TransactionAttributeType.SUPPORTS) // No transaction as it is read-only query
+    public NameRelease findRelease(String id) {    
+        return em.find(NameRelease.class, id);
+    }
 
     /**
      * Retrieve all events of a given name.
@@ -302,7 +313,7 @@ public class NamesEJB implements NamesEJBLocal {
         logger.log(Level.INFO, "Results for category " + category + ":" + nameEvents.size());
         return nameEvents;
     }
-
+    
     /**
      * Update the status of a set of events.
      *

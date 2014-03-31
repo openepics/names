@@ -24,10 +24,10 @@ public class NameRestService extends Application {
      */
     private Set<Class<?>> getRestResourceClasses() {
         Set<Class<?>> resources = new java.util.HashSet<Class<?>>();
-        resources.add(org.openepics.names.service.NameReleaseResource.class);
-        resources.add(org.openepics.names.service.NameEventResource.class);
-        resources.add(org.openepics.names.service.NameElementResource.class);
         resources.add(org.openepics.names.service.NameElementCategoryResource.class);
+        resources.add(org.openepics.names.service.NameElementResource.class);
+        resources.add(org.openepics.names.service.NameEventResource.class);
+        resources.add(org.openepics.names.service.NameReleaseResource.class);
         return resources;
     }
     

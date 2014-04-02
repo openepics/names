@@ -15,7 +15,12 @@
  */
 package org.openepics.names;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,8 +65,8 @@ public class ReportManager implements Serializable {
         try {
             logger.log(Level.INFO, "Action: generating report");
             // System.out.println("Action: generating report");
-            char etype = "%".equals(eventType)? 0 : eventType.charAt(0);
-            char estat = "%".equals(eventStatus)? 0 : eventStatus.charAt(0);
+            char etype = "%".equals(eventType) ? 0 : eventType.charAt(0);
+            char estat = "%".equals(eventStatus) ? 0 : eventStatus.charAt(0);
             events = namesEJB.findEvents(etype, estat);
         } catch (Exception e) {
             System.err.println(e);
@@ -72,34 +77,53 @@ public class ReportManager implements Serializable {
         }
     }
 
-    public void genPublishedReport() {
+    public void approvedNamesReport() {
         List<NameEvent> stdnames;
+        Date relDate;
+
         try {
             if (events == null) {
                 events = new ArrayList<NameEvent>();
             } else {
                 events.clear();
-            }           
+            }
 
             logger.log(Level.INFO, "Action: generating published report");
             // System.out.println("Action: generating report");
             stdnames = namesEJB.getStandardNames("%", false);
+            relDate = inRelease == null ? new Date() : inRelease.getReleaseDate();
+
             for (NameEvent nreq : stdnames) {
                 if (nreq.getProcessDate() != null
-                        && nreq.getProcessDate().before(inRelease.getReleaseDate())
+                        && nreq.getProcessDate().before(relDate)
                         && nreq.getStatus() == 'a' && nreq.getEventType() != 'd') {
                     // it is published
                     events.add(nreq);
-                } 
+                }
             }
-            
         } catch (Exception e) {
             System.err.println(e);
         } finally {
             eventType = eventStatus = null;
             //eventType = eventStatus = startRev = endRev = null;
             startDate = endDate = null;
+            inRelease = null;
         }
+    }
+
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        Document pdf = (Document) document;
+        pdf.setPageSize(PageSize.LETTER.rotate());
+        // pdf.open();
+        // pdf.setPageSize(PageSize.LETTER.rotate());
+        pdf.addCreationDate();
+        pdf.addHeader("Header", "Proteus: Naming Convention Rep");
+        pdf.addTitle("Proteus: Naming Convention Report");
+
+        // ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        // String logo = servletContext.getRealPath("") + File.separator + "images" + File.separator + "prime_logo.png";
+
+        // pdf.add(Image.getInstance(logo));
     }
     
     public List<NameEvent> getEvents() {
@@ -154,7 +178,6 @@ public class ReportManager implements Serializable {
         this.inRelease = inRelease;
     }
 
-   
     public void setPubManager(PublicationManager pubMgr) {
         this.pubManager = pubMgr;
     }

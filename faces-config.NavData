@@ -5,15 +5,15 @@
         <Node id="request-sub.xhtml" x="150" y="300" zoom="true"/>
         <Node id="login.xhtml" x="400" y="300" zoom="true"/>
         <Node id="namesTemplate.xhtml" x="650" y="300" zoom="true"/>
-        <Node id="expired.xhtml" x="1150" y="300" zoom="true"/>
         <Node id="about.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="expired.xhtml" x="1150" y="300" zoom="true"/>
         <Node id="preferences.xhtml" x="150" y="150" zoom="true"/>
         <Node id="help.xhtml" x="150" y="600" zoom="true"/>
         <Node id="request-proc.xhtml" x="150" y="750" zoom="true"/>
         <Node id="resources/comps/logincomp.xhtml" x="650" y="150" zoom="true"/>
         <Node id="error.xhtml" x="400" y="150" zoom="true"/>
-        <Node id="names.xhtml" x="900" y="300" zoom="true"/>
         <Node id="reports.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="names.xhtml" x="900" y="300" zoom="true"/>
         <Node id="index.xhtml" x="900" y="150" zoom="true"/>
         <Node id="api-manual.xhtml" x="1400" y="150" zoom="true"/>
         <Node id="menubar.xhtml" x="400" y="600" zoom="true"/>

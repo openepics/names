@@ -164,6 +164,8 @@ pip-log.txt
 
 # Java
 target/*
+# JSF file, VV
+faces-config.NavData
 
 # PDF. VV
 *.pdf

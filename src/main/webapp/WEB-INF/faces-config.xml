@@ -2,10 +2,10 @@
 
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 
-<faces-config version="2.0"
-              xmlns="http://java.sun.com/xml/ns/javaee" 
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
     <factory>
         <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
@@ -18,6 +18,14 @@
         <navigation-case>
             <from-outcome>login</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>gui-docs</from-outcome>
+            <to-view-id>/docs/gui/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>api-v1-docs</from-outcome>
+            <to-view-id>/docs/api-v1/index.xhtml</to-view-id>
         </navigation-case>             
     </navigation-rule>
     

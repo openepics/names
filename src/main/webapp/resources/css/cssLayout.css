@@ -1,3 +1,8 @@
+body {
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif; 
+}
+
 .Modified {
     background-color:   palegreen; 
 }
@@ -34,6 +39,10 @@
 
 .heading { 
     text-align: left;   
+}
+
+.centered { 
+    margin: 0 auto;
 }
 
 .fixedPosition {
@@ -93,7 +102,7 @@
     left: 15px;
     padding: 10px;
     text-decoration: none;
-    background-image: url('../images/header-bg.png'); 
+    background-image: url("#{resource['images:header-bg.png']}"); 
     background-repeat: repeat;
 }
 

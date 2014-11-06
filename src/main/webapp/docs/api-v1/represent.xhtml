@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <h3>Resource Representations</h3>
+    A resource can be manifested or encoded in various formats: binary, XML, JSON, Atom etc. 
+    The #{msgs.title} API can represent resources in different formats. Currently it supports JSON and XML representations.
+    The desired representations must be specified through HTTP ACCEPT header:
+    <ul>
+        <li>Accept: application/json</li>
+        <li>Accept: application/xml</li>               
+    </ul>
+    <p>Example representations for some of the resources are given below. 
+        <i>Note that the resource attribute names match the XML tags and JSON names. 
+            However, there can be extraneous attributes in the API's response, and they must be ignored. 
+            Only the attributes listed  in the Resources Section above form the API.</i></p>
+
+    <p:panel header='Representations'  toggleable="true">
+        <p:tabView>
+            <p:tab title="name: json">
+                <pre name="code" class="brush:xml">
+{
+    "category": "system",
+    "code": "VTA",
+    "description": "Vertical test assembly",   
+    "status": "Added"
+}
+                </pre>
+            </p:tab>
+            <p:tab title="name: xml">
+                <pre name="code" class="brush:xml">
+&lt;nameElement&gt;
+  &lt;code&gt;ABS&lt;/code&gt;
+  &lt;description&gt;Absorber&lt;/description&gt;
+  &lt;category&gt;device-type&lt;/category&gt;
+  &lt;massNumber&gt;48&lt;/massNumber&gt;
+  &lt;status&gt;Published&lt;/status&gt;
+&lt;/nameElement&gt;
+                </pre>
+            </p:tab>
+
+        </p:tabView>
+    </p:panel>
+</ui:composition>

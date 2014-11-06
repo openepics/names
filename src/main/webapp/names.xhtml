@@ -7,7 +7,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 >
 
-    <ui:define name="content">
+    <ui:define name="content" >
         <h:form id="stdNameForm"> 
             <p:growl id="stdNameMsgs" showDetail="true"/> 
             <p:dataTable id="nameTable" var="stdname" value="#{namesManager.standardNames}" 
@@ -17,7 +17,7 @@
                          selection="#{namesManager.selectedName}" 
                          filteredValue="#{namesManager.filteredNames}"
                          rowStyleClass="#{namesManager.nameStatus(stdname)}"
-                         style="width: 90%">
+                         style="width: 90%" styleClass="centered">
                 <f:facet name="header">
                     <h:outputText value="#{msgs.nameElement}" />                       
                 </f:facet>

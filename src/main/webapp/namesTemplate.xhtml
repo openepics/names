@@ -8,14 +8,13 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="./resources/images/proteus.ico" />
         <title>Proteus: Naming System</title>
     </h:head>
 
-    <h:body>
-
+    <h:body>             
+        
+        <h:outputStylesheet name="css/cssLayout.css" />
         <div id="full" class="boxf">
             <div id="top" class="box">
                 <p:panel styleClass="Logo">
@@ -32,7 +31,7 @@
                 </div>
             </div>
 
-            <div id="content" class="box"  align="center">
+            <div id="content" class="box" >
                 <ui:insert name="content">Content</ui:insert>
             </div>
 

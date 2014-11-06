@@ -16,40 +16,46 @@
         
         
         <p:menubar id="mainMenu" >
-            <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="index.xhtml"/>
-            <p:menuitem value="Browse" icon="ui-icon-arrow-4-diag" title="Browse All Names" url="names.xhtml"/>               
+            <p:menuitem value="Home" icon="ui-icon-home" title="Home" url="/"/>
+            <p:menuitem value="Browse" icon="ui-icon-arrow-4-diag" title="Browse All Names" url="/names.xhtml"/>               
 
             <p:submenu label="Request" icon="ui-icon-comment">
                 <p:menuitem value="Submit Request" title="Submit a Change Request" 
-                            url="request-sub.xhtml" icon="ui-icon-suitcase" 
+                            url="/request-sub.xhtml" icon="ui-icon-suitcase" 
                             disabled="#{not userManager.loggedIn}" />            
                 <p:menuitem value="My Requests" title="Check status of your requests" 
-                            url="request-sub.xhtml?option=user" icon="ui-icon-comment" 
+                            url="/request-sub.xhtml?option=user" icon="ui-icon-comment" 
                             disabled="#{not userManager.loggedIn}" />
             </p:submenu>
 
-            <p:menuitem value="Reports" title="Reports"  icon="ui-icon-print" url="reports.xhtml" disabled="false" />
+            <p:menuitem value="Reports" title="Reports"  icon="ui-icon-print" url="/reports.xhtml" disabled="false" />
 
             <p:submenu label="Admin" icon="ui-icon-note"  >
                 <p:menuitem value="Process Requests" title="Accept/Reject Requests" 
-                            url="request-proc.xhtml" icon="ui-icon-wrench" 
+                            url="/request-proc.xhtml" icon="ui-icon-wrench" 
                             disabled="#{not userManager.editor}" />
                 <p:menuitem value="Publish Names" title="Release a new version of Naming Convention" 
-                            url="publish.xhtml" icon="ui-icon-note" 
+                            url="/publish.xhtml" icon="ui-icon-note" 
                             disabled="#{not userManager.editor}" /> 
             </p:submenu>
 
-            <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="preferences.xhtml" />
+            <p:menuitem value="Preferences" title="Preferences"  icon="ui-icon-gear" url="/preferences.xhtml" />
             
             <!-- p:menuitem value="login" title="Login"  icon="ui-icon-gear" url="login.xhtml" / -->
             
             <p:submenu label="Help" icon="ui-icon-help">
                 <p:menuitem value=" Online Help" title="Online Help" 
                             icon="ui-icon-help" 
-                            url="help.xhtml" />
-                <p:menuitem value=" API Manual" title="API Manual" 
+                            url="/docs/gui" />
+                
+                <p:submenu label=" API Docs" icon="ui-icon-help">
+                    <p:menuitem value=" RESTful API V1" title="API Manual V1" 
                             icon="ui-icon-script" 
-                            url="api-manual.xhtml" />
+                            url="/docs/api-v1/" />
+                    <p:menuitem value=" RESTful API V0" title="API Manual V0" 
+                            icon="ui-icon-script" 
+                            url="/docs/api-v0/" />                 
+                </p:submenu>
                 <p:menuitem value=" Naming Document" title="Latest Naming System Document"
                             icon="ui-icon-document" target="_blank"
                             url="#{publicationManager.latestRelease eq null? '/' : publicationManager.latestRelease.docUrl}" disabled="#{publicationManager.latestRelease eq null}"/>

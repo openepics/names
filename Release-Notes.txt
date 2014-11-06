@@ -6,6 +6,17 @@ Release Notes: Naming System Application
 
 Overview: Naming System is for managing the FRIB Naming Convention. 
 
+Naming System Version 2.5.0  Date: 2014-Nov-05
+
+Summary of Changes from Previous Version:
+  - New version of RESTful API
+  - Moved to Java EE 7 and Glassfish 4.x
+
+  Known Issues:
+  - In browse mode, selecting or deselecting 'Delete' refreshes the view
+  - When modifying a request, everthing has to be re-entered including category
+  - 'Request' submenu blocks the 'logoff' button
+  
 Naming System Version 2.4.0  Date: 2013-Aug-02
 
 Summary of Changes from Previous Version:

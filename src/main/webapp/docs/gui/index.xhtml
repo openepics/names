@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content">
+        <p:panel header="#{msgs.title} Manual" styleClass="Help" >
+            <h:outputText value="Listed below are some of the frequently-used work-flows and frequently-asked questions related to the Naming System" /> 
+        </p:panel>
+        
+        <p:accordionPanel styleClass="Help">  
+
+            <p:tab title="What do the different colored rows and status mean?">            
+                <p:panelGrid>
+                    <f:facet name="header"> 
+                        <p:row>  
+                            <p:column>Status</p:column>                         
+                            <p:column>Color</p:column>                      
+                            <p:column>Meaning</p:column>  
+                        </p:row>  
+                    </f:facet>  
+
+                    <p:row>  
+                        <p:column>Added</p:column>  
+                        <p:column>Green</p:column>  
+                        <p:column>It is a new name. It has not been published i.e. it is not part of the naming standard but has been approved for use.                            
+                            You may safely use the name.</p:column>                       
+                    </p:row>
+                    <p:row>  
+                        <p:column>Modified</p:column>  
+                        <p:column>Green</p:column>  
+                        <p:column>The name has been modified since the last release of the naming standard. 
+                            It has not been published i.e. it is not part of the naming standard but has been approved for use.
+                            You may safely use the name.</p:column>                       
+                    </p:row>
+                    <p:row>  
+                        <p:column>Deleted</p:column>  
+                        <p:column>Grayed out</p:column>  
+                        <p:column>The name has been retired. Obviously, you must not use the name.</p:column>                       
+                    </p:row> 
+                    <p:row>  
+                        <p:column>In Process</p:column>  
+                        <p:column>Red</p:column>  
+                        <p:column>Someone has requested modifications to the name. The request is being processed. Do not use the name.</p:column>                       
+                    </p:row> 
+                    <p:row>  
+                        <p:column>Published</p:column>  
+                        <p:column>Theme Colors</p:column>  
+                        <p:column>The name is part of the released naming standard. You may use the name without any reservations.</p:column>                       
+                    </p:row>
+                </p:panelGrid>
+            </p:tab>
+            <p:tab title="To browse the list of current names">            
+                <h:outputText value="Select" />  
+                <h:link value=" Browse " outcome="names.xhtml" /> 
+                <h:outputText value="from the main menu." /> 
+            </p:tab> 
+            <p:tab title="What is the latest released naming standard?">            
+                <h:outputText value="The name and date of the latest release standard are shown on the top right corner. 
+                              The latest naming standard document is available under Help menu." />  
+            </p:tab>
+            <p:tab title="To submit a change request ">            
+                <h:outputText  
+                    value="If you are not logged in, you must first login. If you are logged in, select" />  
+                <h:link value=" Submit Request " outcome="request-sub.xhtml" /> 
+                <h:outputText value="under Request menu. On the request page, choose from the Requests pop-up menu to Add, Modify, or Delete a name." /> 
+            </p:tab>  
+            <p:tab title="To check the status of your request " >  
+                <h:outputText value="If you are not logged in, you must first login. If you are logged in, select" />
+                <h:link value=" My Requests " outcome="request-sub.xhtml?option=user" /> 
+                <h:outputText value="under Request menu." />  
+            </p:tab>  
+            <p:tab title="To check the status of your request " >  
+                <h:outputText value="If you are not logged in, you must first login. If you are logged in, select" />
+                <h:link value=" My Requests " outcome="request-sub.xhtml?option=user" /> 
+                <h:outputText value="under Request menu. Select the request, and choose 'Cancel' from the Requests pop-up menu" />  
+            </p:tab> 
+            <p:tab title="To process requests">  
+                <h:outputText value="You must be logged in, and authorized to process requests. Select" />  
+                <h:link value=" Process Requests " outcome="request-proc.xhtml" /> 
+                <h:outputText value="under the Admin menu. Select one or more requests, and choose Approve or Reject from the Process pop-up menu." /> 
+            </p:tab>  
+            <p:tab title="To publish a new naming standard ">  
+                <h:outputText value="You must be logged in, and authorized to publish naming standards. Select" />  
+                <h:link value=" Publish Names " outcome="publish.xhtml" /> 
+                <h:outputText value="under the Admin menu. Select Publish from the Publish pop-up menu." /> 
+            </p:tab> 
+        </p:accordionPanel>  
+    </ui:define>
+
+</ui:composition>

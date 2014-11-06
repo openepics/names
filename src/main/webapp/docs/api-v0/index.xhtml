@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content" >
+
+        <ui:param name="restRoot" value="#{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}/rest/v0" />    
+
+        <div style="text-align: left">
+            <h3> Obsolete </h3>
+            <p>Note: This version of the API has been obsoleted by a <h:link value="newer version" outcome="api-v1-docs"/>. 
+                Please do not use this API for new applications.</p>
+            <h3> Application Programming Interface</h3>
+            <p>Data in the Naming System can be accessed programmatically through a  
+                <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">RESTful</a>
+                Application Programming Interface (API). The Naming System API follows
+                <a href="http://semver.org/" target="_blank">Semantic Versioning</a> for its version numbers. The current API version number is #{msgs.apiversion}.
+            </p>
+            <h3>Introduction</h3>
+            <p>
+                A Name is a unique identifier for a component (device, rack, power-supply etc) in an Accelerator Facility. 
+                It is divided into several Name Parts (such as System Part, Device Part, and Signal Part). 
+                Each Name Part is further divided into Name Elements. For example, the System Part may have System and Sub-system as its elements. 
+                The Naming System manages Name Elements. There are several type or categories of Name Elements. 
+                Some examples of the Name Elements are: System, Sub-system, Device Type, Signal Type, and Signal Domain.
+            </p>
+            <p>
+                A name element goes through several phases in its life-cycle: 
+                <ul>
+                    <li>Inception: When a user requests for a new name element</li>
+                    <li>Modification: When user requests for changes to a name element</li>
+                    <li>Retirement:  When a name element is removed from the Naming System</li>
+                </ul>
+
+                A name element can be in the following states:
+                <ul>
+                    <li>Approved: It is approved for publication. Even though the name element has not been published, it can be used.</li>
+                    <li>In Process or Awaiting Approval: A user has requested for a change, and the change is being processed. It is recommended not to use a name element which is in this state.</li>
+                    <li>Published: The name element is part of the current Naming Standard.</li>
+                    <li>Deleted: The name element has been removed from the standard. A name in the state, obviously, must not be used.</li>
+                </ul>
+                Many of the events in the life-cycle of a name element occur due to change-requests from users.
+            </p>
+            <h3>Work Flow</h3>
+            <ol>
+                <li>A user submits a change-request. It can be addition, modification, or deletion of a name element.</li>
+                <li>Optionally, the user may cancel her request(s).</li>
+                <li>A privileged user (administrator), accepts or rejects the request.</li>
+                <li>A privileged user (administrator), publishes a new release of Naming System. All accepted change-requests become part of the new release i.e. they are published.</li>
+            </ol>
+            <h3>Representations</h3>
+
+            The representations of the resources must be specified through HTTP ACCEPT header. 
+            This API supports JSON, XML, and Text representations. 
+            Examples:
+            <ul>
+                <li>Accept: application/json</li>
+                <li>Accept: application/xml</li>
+                <li>Accept: text/html</li>
+            </ul>
+            <h3>Base URL</h3>
+            The base URL for Resource Identifiers is #{restRoot}.
+            <h3>Resources</h3>
+            <p:panelGrid style="text-align: left">  
+                <f:facet name="header">  
+                    <p:row>  
+                        <p:column>Name</p:column>  
+                        <p:column>Method</p:column>  
+                        <p:column>Resource ID</p:column>  
+                        <p:column>Description</p:column> 
+                        <p:column>Parameters</p:column> 
+                        <p:column>Examples</p:column> 
+                    </p:row>  
+                </f:facet>  
+                <p:row>  
+                    <p:column>Name Element</p:column>  
+                    <p:column>GET</p:column>  
+                    <p:column>/name</p:column>  
+                    <p:column>List of Name Elements. </p:column> 
+                    <p:column><ul><li>category: Events for Name Elements of given category</li><li>deleted: (true or false) Include deleted name elements</li></ul></p:column> 
+                    <p:column><ul><li>#{restRoot}/name</li><li>#{restRoot}/name?category=system</li></ul></p:column> 
+                </p:row>
+                <p:row>  
+                    <p:column>Category</p:column>  
+                    <p:column>GET</p:column>  
+                    <p:column>/category</p:column>  
+                    <p:column>List of categories of name elements. </p:column> 
+                    <p:column></p:column> 
+                    <p:column><ul><li>#{restRoot}/category</li></ul></p:column> 
+                </p:row>
+                 <p:row>  
+                    <p:column>Event</p:column>  
+                    <p:column>GET</p:column>  
+                    <p:column>/event</p:column>  
+                    <p:column>List of all events of all naming elements</p:column> 
+                    <p:column><ul><li>category: Events for Name Elements of given category</li><li>deleted: (true or false) Include deleted name elements</li></ul></p:column> 
+                    <p:column><ul><li>#{restRoot}/event</li><li>#{restRoot}/event?category=system</li></ul></p:column> 
+                </p:row>
+                <p:row>  
+                    <p:column>Release</p:column>  
+                    <p:column>GET</p:column>  
+                    <p:column>/release</p:column>  
+                    <p:column>List of all releases</p:column> 
+                    <p:column></p:column> 
+                    <p:column><ul><li>#{restRoot}/release</li></ul></p:column> 
+                </p:row>
+            </p:panelGrid>
+        </div>
+    </ui:define>
+
+</ui:composition>

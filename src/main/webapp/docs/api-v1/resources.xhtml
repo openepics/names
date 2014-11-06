@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"               
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <h3>Resources</h3>
+    <p> A resource is an entity that is managed by #{msgs.title}. For example, a name element, a name category, a name request etc.
+        The #{msgs.title} API provides access to the resources or entities that it manages. 
+        These entities and their attributes are described below. Note that the names of attributes are important as they are 
+        used in the various representations of these resources (see Resource Representations Section below).</p>
+    
+    <p:panel header='Resources and Attributes' toggleable="true" >
+        <p:panelGrid style="text-align: left">  
+            <f:facet name="header">  
+                <p:row>  
+                    <p:column>Resource</p:column>  
+                    <p:column>Description</p:column>  
+                    <p:column>Attribute</p:column>  
+                    <p:column>Type</p:column> 
+                    <p:column>Description</p:column> 
+                    <p:column>Examples</p:column> 
+                </p:row>  
+            </f:facet> 
+
+            <p:row>
+                <p:column rowspan="4">Name</p:column>  
+                <p:column rowspan="4">Name Element</p:column>  
+                <p:column>code</p:column>  
+                <p:column>String</p:column> 
+                <p:column>Code for the Name Element</p:column> 
+                <p:column>AP</p:column> 
+            </p:row>
+            <p:row>                   
+                <p:column>description</p:column>                    
+                <p:column>String</p:column> 
+                <p:column>Description</p:column>  
+                <p:column>Aperture</p:column>                     
+            </p:row>
+            <p:row>                   
+                <p:column>category</p:column>                    
+                <p:column>String</p:column> 
+                <p:column>Name category</p:column>  
+                <p:column>device-type</p:column>                     
+            </p:row>
+            <p:row>                   
+                <p:column>status</p:column>                    
+                <p:column>String. </p:column> 
+                <p:column>Status of the name element. Possible values are listed <h:link value="here" outcome="gui-docs"/> </p:column>  
+                <p:column>Published</p:column>                     
+            </p:row>
+
+            <p:row>
+                <p:column rowspan="1">category</p:column>  
+                <p:column rowspan="1">Beam</p:column>  
+                <p:column>id</p:column>  
+                <p:column>String</p:column> 
+                <p:column>Unique name for the category</p:column> 
+                <p:column>device-type</p:column> 
+            </p:row>
+
+            <p:row>
+                <p:column rowspan="1">release</p:column>  
+                <p:column rowspan="1">Naming Convention release</p:column>  
+                <p:column>docUrl</p:column>  
+                <p:column>String</p:column> 
+                <p:column>URL of the release documentt</p:column> 
+                <p:column>http://portal.frib.msu.edu</p:column> 
+            </p:row>          
+
+            <p:row>  
+                <p:column rowspan="1">event</p:column>  
+                <p:column rowspan="1">An event in Naming Element's lifecycle</p:column>  
+                <p:column>nameCode</p:column>  
+                <p:column>String</p:column> 
+                <p:column>Name Element</p:column> 
+                <p:column>ABS</p:column> 
+            </p:row>
+                           
+        </p:panelGrid>
+    </p:panel>
+</ui:composition>

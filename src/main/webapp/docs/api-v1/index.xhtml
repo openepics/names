@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/namesTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fc="http://java.sun.com/jsf/composite/comps">
+
+    <ui:define name="content" >
+
+        <ui:param name="restRoot" value="#{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}#{msgs.restURIbase}/v#{msgs.apiversion}" />    
+      
+            <h1> #{msgs.title} - Application Programming Interface</h1>
+
+            <h3>Introduction</h3>
+            <p>
+                #{msgs.title} manages naming elements for FRIB's Naming Convention.
+                Data in #{msgs.title} can be accessed programmatically through a  
+                <a href="#{msgs.restReference}" target="_blank">RESTful</a>
+                Application Programming Interface (API), which is described in this document. 
+            </p>
+
+            <h3>Version</h3>
+            The #{msgs.title} API follows
+            <a href="#{msgs.semverReference}" target="_blank">Semantic Versioning</a> for its version numbers. The current API version number is #{msgs.apiversion}.         
+
+            <ui:include src="resources.xhtml" />                        
+
+            <ui:include src="represent.xhtml" />
+
+            <h3>Base URI</h3>
+            The base URI for Resource Identifiers, on this server, is  #{restRoot}
+
+            <h3>Caching</h3>
+            Currently the #{msgs.title} API does not support caching. However, future versions of the API will support caching mechanisms such as 
+            Conditional GETs and Expiration Times.
+
+            <h3>Authentication and Authorization</h3>
+            This version of the API does not restrict access to its resources. However, future versions will require client applications to authenticate
+            themselves to  access  this API. So please be prepared to update you application.
+            <i>Note: Authentication mechanisms of Hour Log API will be changed in future. So please be prepared to update you application.</i>          
+
+            <h3>Encryption</h3>
+            Hour Log API forces the use of HTTPS protocol. If HTTP is used, Hour Log will redirect it over to HTTPS. 
+            Note that the public key of the Hour Log development 
+            and QA server may not be signed by trusted Certificate Authorities.
+
+            <h3>Error Codes and Responses</h3>
+            The Hour Log API attempts to return appropriate <a href="#{msgs.httpCodes}" target="_blank">HTTP Status Codes</a> for each request.
+
+            <ui:include src="api.xhtml" />
+
+            <h3>Examples</h3>
+            <h3>References</h3>
+        
+    </ui:define>
+
+</ui:composition>

@@ -8,31 +8,34 @@
                 >
 
     <ui:define name="content">
+        <p:growl id="requestMsgs" showDetail="true"/>  
         <h:outputText value="Sorry, you are not authorized to perform this operation." rendered="#{not userManager.editor}" />
         <h:form id="requestForm" rendered="#{userManager.editor}"> 
             <p:panelGrid style="position:fixed" styleClass="noBorders"  rendered="false">
                 <p:row>
                     <p:column>
-                        <p:commandButton icon="ui-icon-check" onclick="approveRequest.show()" title="Approve"/>
+                        <p:commandButton icon="ui-icon-check" onclick="PF('approveRequest').show()" title="Approve"/>
                     </p:column>
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:commandButton icon="ui-icon-close" onclick="rejectRequest.show()" title="Reject"/>
+                        <p:commandButton icon="ui-icon-close" onclick="PF('rejectRequest').show()" title="Reject"/>
                     </p:column>
                 </p:row>       
             </p:panelGrid>
             <p:menu  rendered="true" styleClass="fixedPosition box"  style="width: 7%">
                 <p:submenu  label="Process">                                          
-                    <p:menuitem value="Approve" icon="ui-icon-check" update=":ApproveForm" oncomplete="approveRequest.show()" title="Approve Request" />                                                         
-                    <p:menuitem value="Reject"  icon="ui-icon-close" update=":RejectForm" oncomplete="rejectRequest.show()" title="Reject Request" />                                          
-                    <p:menuitem value="History" icon="ui-icon-search"  title="View History" actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />  
+                    <p:menuitem value="Approve" icon="ui-icon-check" update=":ApproveForm" oncomplete="PF('approveRequest').show()" title="Approve Request" />                                                         
+                    <p:menuitem value="Reject"  icon="ui-icon-close" update=":RejectForm" oncomplete="PF('rejectRequest').show()" title="Reject Request" />                                          
+                    <p:menuitem value="History" icon="ui-icon-search"  title="View History" actionListener="#{requestProcManager.findHistory()}" 
+                                update=":requestForm:historyTable" oncomplete="PF('nameDetailWid').show()" />  
                 </p:submenu>
             </p:menu>
             <p:contextMenu for="requestTable">
-                <p:menuitem value="Approve" icon="ui-icon-check"  onclick="approveRequest.show()" />
-                <p:menuitem value="Reject" icon="ui-icon-close"  onclick="rejectRequest.show()" />
-                <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" oncomplete="nameDetail.show()" />                   
+                <p:menuitem value="Approve" icon="ui-icon-check"  onclick="PF('approveRequest').show()" />
+                <p:menuitem value="Reject" icon="ui-icon-close"  onclick="PF('rejectRequest').show()" />
+                <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestProcManager.findHistory()}" update=":requestForm:historyTable" 
+                            oncomplete="PF('nameDetailWid').show()" />                   
             </p:contextMenu>
             <p:dataTable id="requestTable" var="nevent" value="#{requestProcManager.events}" 
                          paginator="true" rows="50" resizableColumns="true"                                   
@@ -79,12 +82,12 @@
                 </p:column> 
             </p:dataTable>
 
-            <p:growl id="requestMsgs" showDetail="true"/>   
+             
 
 
             <!-- ToDo: find better way to adjust width of the panel -->
-            <p:dialog id="nameDetail"  widgetVar="nameDetail" width="900" dynamic="true"
-                      maximizable="true" minimizable="true" header="Name Details"
+            <p:dialog id="nameDetail"  widgetVar="nameDetailWid" width="900" 
+                      maximizable="true" minimizable="true" header="Name Details" position="center top"
                       footer="Name History">                
                 <p:dataTable id="historyTable" var="nevent" value="#{requestProcManager.historyEvents}" 
                              paginator="false" rows="50" resizableColumns="true"                                   
@@ -138,7 +141,7 @@
         </h:form>
 
         <h:form id="ApproveForm" >
-            <p:dialog id="approveRequest"  widgetVar="approveRequest">                
+            <p:dialog id="approveRequestDlg"  widgetVar="approveRequest" position="center top">                
                 <f:facet name="header">  
                     <h:outputText value="Approve"/>  
                 </f:facet>
@@ -156,17 +159,17 @@
                 </p:panelGrid>
                 <p:separator />
 
-                <p:commandButton value="Approve" style="float: left"
+                <p:commandButton value="Approve" style="float: right" 
                                  update=":requestForm"                               
-                                 oncomplete="approveRequest.hide()"  
+                                 oncomplete="PF('approveRequest').hide()"  
                                  action="#{requestProcManager.onApprove()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="approveRequest.hide()"  />  
+                <p:commandButton  value="Cancel" type='button' style="float: left" 
+                                  onclick="PF('approveRequest').hide()"  />  
             </p:dialog> 
         </h:form>
 
         <h:form id="RejectForm">
-            <p:dialog id="rejectRequest"  widgetVar="rejectRequest">                
+            <p:dialog id="rejectRequestDlg"  widgetVar="rejectRequest" position="center top">                
                 <f:facet name="header">  
                     <h:outputText value="Reject"/>  
                 </f:facet>
@@ -183,12 +186,12 @@
                     </p:row>                                       
                 </p:panelGrid>
                 <p:separator />
-                <p:commandButton  value="Reject" style="float: left"
+                <p:commandButton  value="Reject" style="float: right" 
                                   update=":requestForm"                               
-                                  oncomplete="rejectRequest.hide()"  
+                                  oncomplete="PF('rejectRequest').hide()"  
                                   action="#{requestProcManager.onReject()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="rejectRequest.hide()"  />  
+                <p:commandButton  value="Cancel" type='button' style="float: left"
+                                  onclick="PF('rejectRequest').hide()"  />  
             </p:dialog>
         </h:form>
 

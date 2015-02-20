@@ -19,24 +19,24 @@
                          rowStyleClass="#{namesManager.nameStatus(stdname)}"
                          style="width: 90%" styleClass="centered">
                 <f:facet name="header">
-                    <h:outputText value="#{msgs.nameElement}" />                       
+                    <h:outputText value="#{msgs.nameElement}" /> 
+                    <p:selectBooleanButton id="deletedNamesSwitch" value="#{namesManager.showDeletedNames}" 
+                                           onLabel="Deleted" offLabel="Deleted"  
+                                           onIcon="ui-icon-check" offIcon="ui-icon-close" style='float: right'>  
+                        <p:ajax update="nameTable"  listener="#{namesManager.refreshNames()}" /> 
+                    </p:selectBooleanButton> 
+                    <p:tooltip for="deletedNamesSwitch" value="Show/hide deleted name elements"/>
                 </f:facet>
                 <p:ajax event="rowSelect" listener="#{namesManager.findHistory()}"   
-                        update=":stdNameForm:historyTable" oncomplete="nameDetail.show()" />
+                        update=":stdNameForm:historyTable" oncomplete="PF('nameDetail').show()" />
 
                 <p:column id="nstatus" style="width: 15%" sortBy="#{namesManager.nameStatus(stdname)}" >                  
                     <f:facet name="header">
-                        <h:outputText value="Status" /> 
-                        <br></br>
-                        
-                        <p:selectBooleanButton value="#{namesManager.showDeletedNames}" onLabel="Deleted" offLabel="Deleted" onIcon="ui-icon-check" offIcon="ui-icon-close">  
-                            <p:ajax update="nameTable"  listener="#{namesManager.refreshNames}"/> 
-                        </p:selectBooleanButton> 
-                        
+                        <h:outputText value="Status" />                        
                     </f:facet>
                     <h:outputText value="#{namesManager.nameStatus(stdname)}" />                                                                              
                 </p:column>
-                
+
                 <p:column id="nameCat" sortBy="#{stdname.nameCategoryId.id}"
                           filterBy="#{stdname.nameCategoryId.id}"
                           filterMatchMode="contains" 
@@ -46,13 +46,13 @@
                         <p:menuButton model="#{menuManager.model}"  value="#{msgs.nameElementCategory}"/>                      
                     </f:facet>
                     <h:outputText value="#{stdname.nameCategoryId.id}" /> 
-                    
+
                 </p:column>
                 <p:column id="nameCode" headerText="Code" sortBy="#{stdname.nameCode}"
-                          filterBy="#{stdname.nameCode}"
+                          filterBy="#{stdname.nameCode}" styleClass="statusColumn" 
                           filterMatchMode="startsWith" style="width: 15%" >                  
                     <h:outputText value="#{stdname.nameCode}" />
-                                    
+
                 </p:column>              
                 <p:column id="nameDesc" headerText="Description" 
                           filterBy="#{stdname.nameDescription}"
@@ -71,7 +71,7 @@
                              rowKey="#{nevent.id}"                         
                              emptyMessage="There are no events for this name."                         
                              >
-                   
+
                     <p:column id="id" headerText="Id"  rendered="false" >                  
                         <h:outputText value="#{nevent.nameId}" />                              
                     </p:column>

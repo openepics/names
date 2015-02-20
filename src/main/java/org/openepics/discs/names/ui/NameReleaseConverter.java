@@ -6,6 +6,7 @@
 
 package org.openepics.discs.names.ui;
 
+import java.io.Serializable;
 import org.openepics.discs.names.ent.NameRelease;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ import org.openepics.discs.names.ejb.NamesEJB;
  */
 @Named
 @ViewScoped
-public class NameReleaseConverter implements Converter {
+public class NameReleaseConverter implements Converter, Serializable {
     @EJB
     private NamesEJB namesEJB;
      private static final Logger logger = Logger.getLogger("org.openepics.discs.conf");

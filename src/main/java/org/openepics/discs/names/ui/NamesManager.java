@@ -50,6 +50,8 @@ public class NamesManager implements Serializable {
     private boolean showDeletedNames = false;
     private String currentCategory;
 
+    private String[] statusList = {"Added", "Modified", "In-Process", "Deleted", "Published"};
+    private String[] selectedStatus = {"Added", "Modified", "In-Process",  "Published"};
     /**
      * Creates a new instance of NamesManager
      */
@@ -185,4 +187,18 @@ public class NamesManager implements Serializable {
     public void setShowDeletedNames(boolean showDeletedNames) {
         this.showDeletedNames = showDeletedNames;
     }
+
+    public String[] getStatusList() {
+        return statusList;
+    }
+
+    public String[] getSelectedStatus() {
+        return selectedStatus;
+    }
+
+    public void setSelectedStatus(String[] selectedStatus) {
+        this.selectedStatus = selectedStatus;
+    }
+    
+    
 }

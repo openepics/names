@@ -10,7 +10,7 @@
     xmlns:h="http://java.sun.com/jsf/html">
 
     <h:form id="menuform">
-        <p:growl id="menumsgs" />
+        <p:growl id="menumsgs"  showDetail="true" autoUpdate="true"/>
         <ui:include src="about.xhtml" />
         <fc:logincomp display="false" updates=":menuform:mainMenu"/>
         
@@ -63,15 +63,15 @@
                             icon="ui-icon-alert" target="_blank"
                             url="https://controls.frib.msu.edu/controlshelp/" 
                             rendered="false"/>
-                <p:menuitem value=" About" id="aboutMenu" icon="ui-icon-info" 
+                <p:menuitem value=" About" id="aboutMenu" icon="ui-icon-info"  immediate="true"
                             title="About Proteus: Naming" />                          
             </p:submenu>
 
             <f:facet name="options">  
                 <h:outputText value="#{userManager.user}" style="margin-right:10px" rendered="#{userManager.loggedIn}" />  
                 <p:commandButton id="loginBtn" type="button" value="Login" 
-                                 icon="ui-icon-person" 
-                                 onclick="loginWidget.show()" rendered="#{not userManager.loggedIn}">
+                                 icon="ui-icon-person"  process="@this"
+                                 onclick="PF('loginWidget').show()" rendered="#{not userManager.loggedIn}">
                     <f:param value="Y" name="doAuthenticate" />
                 </p:commandButton>
                 <p:commandButton id="logoutBtn" value="Logout" 

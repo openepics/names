@@ -24,13 +24,14 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.openepics.discs.names.ejb.NamesEJB;
-import org.primefaces.model.MenuModel;
-import org.primefaces.component.menuitem.MenuItem;
-import org.primefaces.model.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.MenuModel;
 
 /**
  * For generating menu items for Naming Categories
- *
+ * TODO: Replace with data table drop-down filter
+ * 
  * @author Vasu V <vuppala@frib.msu.org>
  */
 @Named
@@ -40,7 +41,7 @@ public class MenuManager implements Serializable {
     @EJB
     private NamesEJB namesEJB;
     private static final Logger logger = Logger.getLogger("org.openepics.names");
-    private MenuModel model;
+    private DefaultMenuModel model;
     private List<NameCategory> categories;
 
     /**
@@ -60,21 +61,21 @@ public class MenuManager implements Serializable {
         //submenu.setIcon("ui-icon-carat-2-e-w");
 
         //ToDo: Remove literal references to 'names.xhtml'. Use generic way.
-        MenuItem item = new MenuItem();
+        DefaultMenuItem item = new DefaultMenuItem();
         item.setId("_all");
         item.setValue("All");
         item.setUrl("/names.xhtml");
-        model.addMenuItem(item);
+        model.addElement(item);
         // ToDo: Move to facelets, if possible
         for (NameCategory cat : categories) {
-            item = new MenuItem();
+            item = new DefaultMenuItem();
             item.setId("_" + cat.getId());
             item.setValue(cat.getName());
             item.setUrl("/names.xhtml?category=" + cat.getId());
             // submenu.getChildren().add(item);
             // item.setUpdate("@form");
             // menubar.getChildren().add(item);
-            model.addMenuItem(item);
+            model.addElement(item);
         }
 
         // submenu.getChildren().add(item);

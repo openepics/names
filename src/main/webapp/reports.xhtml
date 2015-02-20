@@ -51,7 +51,7 @@
                         </p:row>
                     </p:panelGrid>
                     <p:commandButton id="genPubRep" value="Generate"  action="#{reportManager.approvedNamesReport}"
-                                     update=":PubRepForm:reportTable" onclick="pubReportPnl.show()" />
+                                     update=":PubRepForm:reportTable" onclick="PF('pubReportPnl').show()" />
                     <p:blockUI block=":PubRepForm:reportPnl" trigger="genPubRep" >          
                         <p:graphicImage value="/resources/images/ajax-loader.gif" style="background-color: transparent" />  
                     </p:blockUI>
@@ -100,7 +100,7 @@
 
                     </p:panelGrid>
                     <p:commandButton id="repButton" value="Generate"  action="#{reportManager.onGenReport}"
-                                     update=":RepDataForm:reportTable" onclick="reportPnl.show()" />
+                                     update=":RepDataForm:reportTable" onclick="PF('reportPnl').show()" />
                     <p:blockUI block=":RepDataForm:reportPnl" trigger="repButton" >          
                         <p:graphicImage value="/resources/images/ajax-loader.gif" style="background-color: transparent" />  
                     </p:blockUI>
@@ -110,7 +110,7 @@
         
         <ui:remove>------------------------- Published Names ------------- </ui:remove>
         <h:form id="PubRepForm">
-            <p:dialog id="reportPnl" widgetVar="pubReportPnl" width="900"  dynamic="true"
+            <p:dialog id="reportPnl" widgetVar="pubReportPnl" width="900"  dynamic="true" position="center top"
                       maximizable="true" minimizable="true"  >
                 <f:facet name="header">
                     <h:outputText value="Report" />                    
@@ -188,7 +188,7 @@
 
         <ui:remove>-------------------------  Names Changes ------------- </ui:remove>
         <h:form id="RepDataForm">
-            <p:dialog id="reportPnl" widgetVar="reportPnl" width="900"  dynamic="true"
+            <p:dialog id="reportPnl" widgetVar="reportPnl" width="900"  dynamic="true" position="center top"
                       maximizable="true" minimizable="true"  >
                 <f:facet name="header">
                     <h:outputText value="Report" />                    

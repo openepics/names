@@ -42,7 +42,7 @@ public class RequestManager implements Serializable {
 
     @EJB
     private NamesEJB namesEJB;
-    private static final Logger logger = Logger.getLogger("org.openepics.names");
+    private static final Logger logger = Logger.getLogger(RequestManager.class.getName());
     private List<NameEvent> validNames;
     private NameEvent selectedName;
     private List<NameEvent> filteredNames;
@@ -93,6 +93,22 @@ public class RequestManager implements Serializable {
         }
     }
 
+    /**
+     * Do preparatory work for name modification.
+     * TODO: Better to have a newName object of type NameEvent instead of all 
+     *        the different variables
+     */
+    public void prepareForModify() {
+        newCategory = selectedName.getNameCategoryId().getId();
+        newCode = selectedName.getNameCode();
+        newDescription = selectedName.getNameDescription();
+        newComment = null;
+    }
+    
+    /**
+     * Modify a name.
+     * 
+     */
     public void onModify() {
         NameEvent newRequest;
 
@@ -100,6 +116,7 @@ public class RequestManager implements Serializable {
             logger.log(Level.INFO, "Modifying ");
             newRequest = namesEJB.createNewEvent('m', selectedName.getNameId(), newCategory, newCode, newDescription, newComment);
             showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " + newRequest.getId());
+//            showMessage(FacesMessage.SEVERITY_INFO, "Your request was successfully submitted.", "Request Number: " );
         } catch (Exception e) {
             showMessage(FacesMessage.SEVERITY_ERROR, "Encountered an error", e.getMessage());
             System.err.println(e);
@@ -108,6 +125,9 @@ public class RequestManager implements Serializable {
         }
     }
 
+    /**
+     * Add a new name.
+     */
     public void onAdd() {
         NameEvent newRequest;
 
@@ -133,6 +153,9 @@ public class RequestManager implements Serializable {
         return selectedName == null ? false : selectedName.getStatus() != 'p';
     }
 
+    /**
+     * Delete a name.
+     */
     public void onDelete() {
         NameEvent newRequest;
 

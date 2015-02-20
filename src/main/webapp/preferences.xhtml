@@ -17,17 +17,26 @@
             </p:panel>
 
 
-            <p:panelGrid  styleClass="noBorders"> 
+            <p:panelGrid  styleClass="noBorders centered" > 
                 <p:row>
                     <p:column>
                         <h:outputText value="Theme: " /> 
                     </p:column>
                     <p:column>
-                        <p:themeSwitcher value="#{preferencesManager.currentTheme}" >  
-                            <f:selectItem itemLabel="Choose Theme" itemValue="" />  
-                            <f:selectItems value="#{preferencesManager.themes}" /> 
+                        <p:themeSwitcher id="basic" style="width:165px" value="#{preferencesManager.currentTheme}" >
+                            <f:selectItem itemLabel="Choose Theme" itemValue="#{preferencesManager.defaultTheme}" />
+                            <f:selectItems value="#{preferencesManager.themes}" var="theme" itemLabel="#{theme.name}" itemValue="#{theme.code}"/>
                             <p:ajax listener="#{preferencesManager.saveTheme}" /> 
-                        </p:themeSwitcher> 
+                        </p:themeSwitcher>
+                        
+                        <ui:remove>
+                            <p:themeSwitcher value="#{preferencesManager.currentTheme}" >  
+                                <f:selectItem itemLabel="Choose Theme" itemValue="" />  
+                                <f:selectItems value="#{preferencesManager.themes}" /> 
+                                <p:ajax listener="#{preferencesManager.saveTheme}" /> 
+                            </p:themeSwitcher> 
+                        </ui:remove>
+
                     </p:column>
                 </p:row>
 

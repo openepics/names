@@ -3,6 +3,7 @@ body {
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif; 
 }
 
+/*
 .Modified {
     background-color:   palegreen; 
 }
@@ -15,17 +16,45 @@ body {
     background-color:    salmon; 
 }
 
+*/
+
 .Deleted {
     text-decoration:   line-through;
     opacity:  0.6;
 }
 
+
+.Published {
+}
+
+
+.Modified .statusColumn, .Added .statusColumn {
+    background: rgba(255,255,255,1);
+    background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(84,204,130,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(25%, rgba(255,255,255,1)), color-stop(100%, rgba(84,204,130,1)));
+    background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(84,204,130,1) 100%);
+    background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(84,204,130,1) 100%);
+    background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(84,204,130,1) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(84,204,130,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#54cc82', GradientType=1 );
+}
+
+.In-Process .statusColumn {
+    background: rgba(255,255,255,1);
+    background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,66,66,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(25%, rgba(255,255,255,1)), color-stop(100%, rgba(255,66,66,1)));
+    background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,66,66,1) 100%);
+    background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,66,66,1) 100%);
+    background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,66,66,1) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 25%, rgba(255,66,66,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ff4242', GradientType=1 );
+}
+/* -------------------------------- */
+
 .Help {
     text-align: left;
 }
 
-.Published {
-}
 
 .unknown, .Cancelled  {
     text-decoration:   blink;
@@ -33,7 +62,7 @@ body {
 
 .noBorders>tbody>tr, .noBorders>tbody>tr>td {
     background: none;
-    border: none;
+    border: none !important;
     /* vertical-align: top; */
 }
 
@@ -75,7 +104,7 @@ body {
 
 /* text wrap around in data table*/
 .ui-datatable td {
-   white-space: normal !important;
+    white-space: normal !important;
 }
 
 .para {
@@ -110,14 +139,14 @@ body {
     text-align: left;
 }
 
-
 #bottom {
     position: relative;
     display: block;
     background-color: #FFFFFF;
-    color: LightSlateGray;
+    color: #009999;
     padding: 10px;
     margin: 10px 0px 0px 0px;
+    text-align:  center;
 }
 
 #top {
@@ -127,77 +156,3 @@ body {
     margin: 0px 0px 10px 0px;
 }
 
-/*
-
-#top {
-    position: relative;
-    border: 1px;
-    padding: 5px;
-    margin: 0px 0px 10px 0px;
-}
-
-#bottom {
-    position: relative;
-    background-color: #FFFFFF;
-    color: LightSlateGray;
-    padding: 10px;
-    margin: 10px 0px 0px 0px;
-}
-
-.h1 {
-    font-size:  16px;   
-    margin-bottom: 10px;
-    padding: 0px;
-    color: #086A87;
-    text-align: left;
-}
-
-#content {
-    text-align: left;
-}
-
-#left {
-    float: left;
-    background-color: #ece3a5;
-    padding: 5px;
-    width: 150px;
-}
-
-#right {
-    float: right;
-    background-color: #ece3a5;
-    padding: 5px;
-    width: 150px;
-}
-
-.center_content {
-    position: relative;
-    background-color: #dddddd;
-    padding: 5px;
-}
-
-.left_content {
-    background-color: #dddddd;
-    padding: 5px;
-    margin-left: 170px;
-}
-
-.right_content {
-    background-color: #dddddd;
-    padding: 5px;
-    margin: 0px 170px 0px 170px;
-}
-*/
-/*
-#top a:link, #top a:visited {
-    color: black;
-    font-weight : bold;
-    text-decoration: none;
-}
-
-#top a:link:hover, #top a:visited:hover  {
-    color: lightslategrey;
-    font-weight : bold;
-    text-decoration : underline;
-}
-*/

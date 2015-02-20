@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:cc="http://java.sun.com/jsf/composite">
@@ -14,7 +15,7 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:growl id="logingrowl" />
+        <ui:remove><p:growl id="logingrowl" /></ui:remove>
         <p:dialog id="loginDialog" widgetVar="loginWidget"  visible="#{cc.attrs.display}" styleClass="noupdate">                
             <f:facet name="header">  
                 <h:outputText value="#{msgs.loginHeader}"/>  
@@ -28,10 +29,10 @@
             <p:watermark for="userid" value="#{msgs.loginUserWM}" />
             <p:watermark for="passwd" value="#{msgs.loginPassWM}" />
             <h:messages id="loginmsgs"/>
-            <p:commandButton id="loginBtn" value="#{msgs.loginBtn}" update="loginmsgs logingrowl #{cc.attrs.updates}" 
+            <p:commandButton id="loginBtn" value="#{msgs.loginBtn}" update="loginmsgs  #{cc.attrs.updates}" 
                              action="#{loginManager.onLogin}" style="float: right"
-                             oncomplete="if (args.loginSuccess) loginWidget.hide()"/> 
-            <p:commandButton id="cancel" value="#{msgs.cancelBtn}" onclick="loginWidget.hide()" 
+                             oncomplete="if (args.loginSuccess) PF('loginWidget').hide()"/> 
+            <p:commandButton id="cancel" value="#{msgs.cancelBtn}" onclick="PF('loginWidget').hide()" 
                              type="button" style="float: left" /> 
         </p:dialog>
         

@@ -17,35 +17,35 @@
             <!-- =================== Menus      ============================ -->
             <p:menu id="reqMenu" styleClass="fixedPosition box" style="width: 8%">
                 <p:submenu label="Requests">                                          
-                    <p:menuitem value="Add" icon="ui-icon-plus" oncomplete="addName.show()" 
+                    <p:menuitem value="Add" icon="ui-icon-plus" oncomplete="PF('addName').show()" 
                                 title="Add Name"  rendered="#{not requestManager.myRequest}"/>                                                         
                     <p:menuitem value="Delete" icon="ui-icon-trash" update=":DelNameForm" 
-                                oncomplete="delName.show()" title="Delete Name" rendered="#{not requestManager.myRequest}" 
+                                oncomplete="PF('delName').show()" title="Delete Name" rendered="#{not requestManager.myRequest}" 
                                 disabled="#{empty requestManager.selectedName}"/>                      
-                    <p:menuitem value="Modify" icon="ui-icon-pencil" update=":ModNameForm" 
-                                oncomplete="modName.show()" title="Modify Name" rendered="#{not requestManager.myRequest}" 
+                    <p:menuitem value="Modify" icon="ui-icon-pencil" update=":ModNameForm" actionListener="#{requestManager.prepareForModify()}"
+                                oncomplete="PF('modName').show()" title="Modify Name" rendered="#{not requestManager.myRequest}" 
                                 disabled="#{empty requestManager.selectedName}"/>  
                     <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
-                                update=":ReqSubForm:historyTable" title="View History" oncomplete="nameDetail.show()" />  
+                                update=":ReqSubForm:historyTable" title="View History" oncomplete="PF('nameDetail').show()" />  
                     <p:menuitem value="Cancel" icon="ui-icon-close" update=":CancelReqForm" 
-                                oncomplete="cancelReq.show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
+                                oncomplete="PF('cancelReq').show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
                                 disabled="#{requestManager.selectedEventProcessed()}"/>                                          
                 </p:submenu>
             </p:menu>
 
             <p:contextMenu id="cntxtMenu" for="crTable">
-                <p:menuitem value="Add" icon="ui-icon-plus"  oncomplete="addName.show()" 
+                <p:menuitem value="Add" icon="ui-icon-plus"  oncomplete="PF('addName').show()" 
                             rendered="#{not requestManager.myRequest}"/>                
                 <p:menuitem value="Delete" update=":DelNameForm" icon="ui-icon-trash"  
-                            oncomplete="delName.show()" rendered="#{not requestManager.myRequest}" 
+                            oncomplete="PF('delName').show()" rendered="#{not requestManager.myRequest}" 
                             disabled="#{empty requestManager.selectedName}"/>                
-                <p:menuitem value="Modify" update=":ModNameForm" icon="ui-icon-pencil"  
-                            oncomplete="modName.show()" rendered="#{not requestManager.myRequest}" 
+                <p:menuitem value="Modify" update=":ModNameForm" icon="ui-icon-pencil"   actionListener="#{requestManager.prepareForModify()}"
+                            oncomplete="PF('modName').show()" rendered="#{not requestManager.myRequest}"  
                             disabled="#{empty requestManager.selectedName}"/> 
                 <p:menuitem value="History" icon="ui-icon-search"  actionListener="#{requestManager.findHistory()}" 
-                            update=":ReqSubForm:historyTable" oncomplete="nameDetail.show()" /> 
+                            update=":ReqSubForm:historyTable" oncomplete="PF('nameDetail').show()" /> 
                 <p:menuitem value="Cancel Request" icon="ui-icon-close" update=":CancelReqForm" 
-                            oncomplete="cancelReq.show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
+                            oncomplete="PF('cancelReq').show()" title="Cancel Request" rendered="#{requestManager.myRequest}" 
                             disabled="#{requestManager.selectedEventProcessed()}"/>
             </p:contextMenu>
 
@@ -65,7 +65,7 @@
                 <p:ajax event="rowSelectRadio" update=":ReqSubForm:reqMenu :ReqSubForm:cntxtMenu :ModNameForm:mpart"/>
                 <p:column selectionMode="single" style="width: 5%" />
 
-                <p:column id="status" headerText="Status" style="width: 9%" >                  
+                <p:column id="status" headerText="Status" style="width: 9%"  >                  
                     <h:outputText value="#{namesManager.nameStatus(nevent)}" />                              
                 </p:column>
                 <p:column id="type" headerText="Type" rendered="#{requestManager.myRequest}" style="width: 7%">                  
@@ -75,7 +75,7 @@
                           filterMatchMode="contains" style="width: 15%" >                  
                     <h:outputText value="#{nevent.nameCategoryId.id}" />                              
                 </p:column>
-                <p:column id="nameCode" headerText="Name" filterBy="#{nevent.nameCode}"
+                <p:column id="nameCode" headerText="Name" filterBy="#{nevent.nameCode}" styleClass="statusColumn"
                           filterMatchMode="startsWith" style="width: 15%" >                  
                     <h:outputText value="#{nevent.nameCode}" />                              
                 </p:column>              
@@ -89,7 +89,7 @@
             <!-- ===================Name History============================ -->
             <!-- ToDo: find better way to adjust width of the panel -->
             <p:dialog id="nameDetail"  widgetVar="nameDetail" width="900" dynamic="true"
-                      maximizable="true" minimizable="true" header="Name Details"
+                      maximizable="true" minimizable="true" header="Name Details" position="center top"
                       footer="Event History">                
                 <p:dataTable id="historyTable" var="nevent" value="#{requestManager.historyEvents}" 
                              paginator="false" rows="50" resizableColumns="true"                                   
@@ -142,51 +142,10 @@
             </p:dialog> 
         </h:form>
 
-        <!-- ===================Add Form================================= -->
-        <h:form id="addNameForm" >      
-            <p:dialog id="addName"  widgetVar="addName">                
-                <f:facet name="header">  
-                    <h:outputText value="Request to Add Name"/>  
-                </f:facet>
-                <p:panelGrid columns="2" style="text-align: left">
-                    <h:outputLabel for="ipart" value="Category:" />
-                    <p:selectOneMenu id="ipart" value="#{requestManager.newCategory}">
-                        <f:selectItems value="#{menuManager.categories}" var="acat"
-                                       itemLabel="#{acat.name}" itemValue="#{acat.id}" />                       
-                    </p:selectOneMenu>  
-
-                    <h:outputLabel for="icode" value="Code:" />                     
-                    <h:inputText id="icode" value="#{requestManager.newCode}" required="true"  label="Short identifier fot the name" />                   
-
-                    <h:outputLabel for="idesc" value="Description:" />                    
-                    <p:inputTextarea id="idesc" value="#{requestManager.newDescription}" 
-                                     rows="4" cols="60"
-                                     required="true"  label="A description of the name"/>
-
-                    <h:outputLabel for="icomm" value="Comment:" /> 
-                    <p:inputTextarea id="icomm" rows="5" cols="60" counter="icounter" maxlength="254" 
-                                     value="#{requestManager.newComment}"
-                                     counterTemplate="{0} characters remaining." autoResize="false"
-                                     required="true"  label="Why you want to add this name?" />                                     
-                </p:panelGrid>
-                <h:outputText id="icounter" />               
-                <p:watermark for="icode" value="Enter Code" />
-                <p:watermark for="idesc" value="Enter Description" />
-                <p:watermark for="icomm" value="Why you want to add this name?" />             
-                <p:separator />
-
-                <p:commandButton value="Submit" style="float: left"
-                                 update=":ReqSubForm"                               
-                                 oncomplete="addName.hide()"  
-                                 action="#{requestManager.onAdd()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="addName.hide()"  />  
-            </p:dialog> 
-        </h:form>
-
+        
         <!-- ===================Modify Form================================= -->      
         <h:form id="ModNameForm" >
-            <p:dialog  widgetVar="modName">                
+            <p:dialog  widgetVar="modName" position="center top">                
                 <f:facet name="header">  
                     <h:outputText value="Request to Change Name"/>  
                 </f:facet>
@@ -240,17 +199,59 @@
                 <p:separator />
 
                 <p:commandButton value="Submit" style="float: right"
-                                 update=":ReqSubForm"                               
-                                 oncomplete="modName.hide()"  
+                                 update=":ReqSubForm"                              
+                                 oncomplete="PF('modName').hide()" 
                                  action="#{requestManager.onModify()}"/> 
-                <p:commandButton  value="Cancel" style="float: left"
-                                  onclick="modName.hide()"  />  
+                <p:commandButton  value="Cancel" style="float: left" type='button'
+                                  onclick="PF('modName').hide()"  />  
             </p:dialog>
         </h:form>
         
+        <!-- ===================Add Form================================= -->
+        <h:form id="addNameForm" >      
+            <p:dialog id="addName"  widgetVar="addName" position="center top">                
+                <f:facet name="header">  
+                    <h:outputText value="Request to Add Name"/>  
+                </f:facet>
+                <p:panelGrid columns="2" style="text-align: left">
+                    <h:outputLabel for="ipart" value="Category:" />
+                    <p:selectOneMenu id="ipart" value="#{requestManager.newCategory}">
+                        <f:selectItems value="#{menuManager.categories}" var="acat"
+                                       itemLabel="#{acat.name}" itemValue="#{acat.id}" />                       
+                    </p:selectOneMenu>  
+
+                    <h:outputLabel for="icode" value="Code:" />                     
+                    <h:inputText id="icode" value="#{requestManager.newCode}" required="true"  label="Short identifier fot the name" />                   
+
+                    <h:outputLabel for="idesc" value="Description:" />                    
+                    <p:inputTextarea id="idesc" value="#{requestManager.newDescription}" 
+                                     rows="4" cols="60"
+                                     required="true"  label="A description of the name"/>
+
+                    <h:outputLabel for="icomm" value="Comment:" /> 
+                    <p:inputTextarea id="icomm" rows="5" cols="60" counter="icounter" maxlength="254" 
+                                     value="#{requestManager.newComment}"
+                                     counterTemplate="{0} characters remaining." autoResize="false"
+                                     required="true"  label="Why you want to add this name?" />                                     
+                </p:panelGrid>
+                <h:outputText id="icounter" />               
+                <p:watermark for="icode" value="Enter Code" />
+                <p:watermark for="idesc" value="Enter Description" />
+                <p:watermark for="icomm" value="Why you want to add this name?" />             
+                <p:separator />
+
+                <p:commandButton value="Submit" style="float: right"
+                                 update=":ReqSubForm"                               
+                                 oncomplete="PF('addName').hide()"  
+                                 action="#{requestManager.onAdd()}"/> 
+                <p:commandButton  value="Cancel" style="float: left" type='button'
+                                  onclick="PF('addName').hide()"  />  
+            </p:dialog> 
+        </h:form>
+
         <!-- ===================Delete Form================================= -->
         <h:form id="DelNameForm" >
-            <p:dialog id="delName"  widgetVar="delName">                
+            <p:dialog id="delName"  widgetVar="delName" position="center top">                
                 <f:facet name="header">  
                     <h:outputText value="Request to Delete/Retire Name"/>  
                 </f:facet>
@@ -275,18 +276,18 @@
                 </p:panelGrid>
                 <p:separator /> 
 
-                <p:commandButton value="Submit" style="float: left"
+                <p:commandButton value="Submit" style="float: right"
                                  update=":ReqSubForm"                               
-                                 oncomplete="delName.hide()"  
+                                 oncomplete="PF('delName').hide()"  
                                  action="#{requestManager.onDelete()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="delName.hide()"  />  
+                <p:commandButton  value="Cancel" style="float: left" type='button'
+                                  onclick="PF('delName').hide()"  />  
             </p:dialog>                       
         </h:form>
 
         <!-- ===================Cancel Form    ============================ -->
         <h:form id="CancelReqForm" >
-            <p:dialog id="cancelReq"  widgetVar="cancelReq">                
+            <p:dialog id="cancelReq"  widgetVar="cancelReq" position="center top">                
                 <f:facet name="header">  
                     <h:outputText value="Cancel Request"/>  
                 </f:facet>
@@ -311,12 +312,12 @@
                 </p:panelGrid>
                 <p:separator /> 
 
-                <p:commandButton value="Submit" style="float: left"
+                <p:commandButton value="Submit" style="float: right"
                                  update=":ReqSubForm"                               
-                                 oncomplete="cancelReq.hide()"  
+                                 oncomplete="PF('cancelReq').hide()"  
                                  action="#{requestManager.onCancel()}"/> 
-                <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="delName.hide()"  />  
+                <p:commandButton  value="Cancel" style="float: left" type='button'
+                                  onclick="PF('cancelReq').hide()"  />  
             </p:dialog>   
 
         </h:form>

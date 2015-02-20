@@ -6,6 +6,21 @@ Release Notes: Naming System Application
 
 Overview: Naming System is for managing the FRIB Naming Convention. 
 
+Naming System Version 2.5.1  Date: 2015-Feb-19
+
+Summary of Changes from Previous Version:
+  - When modifying a name element, the old values are copied so that the  
+    user does not have to input the values again.
+  - Moved to Glassfish 4.1
+  - Moved to PrimeFaces 5.1
+  - The color coding of the status is more subtle
+  - Moved the 'Deleted' button in Browse page out of the status column 
+  - All 'Submit' buttons are on the right, and 'Cancel' buttons on left
+  
+  Known Issues:
+  - 'Request' submenu blocks the 'logoff' button
+  - All dialog boxes come at the top of the page
+  
 Naming System Version 2.5.0  Date: 2014-Nov-05
 
 Summary of Changes from Previous Version:

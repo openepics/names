@@ -16,7 +16,8 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <ui:remove><p:growl id="logingrowl" /></ui:remove>
-        <p:dialog id="loginDialog" widgetVar="loginWidget"  visible="#{cc.attrs.display}" styleClass="noupdate">                
+        <p:dialog id="loginDialog" widgetVar="loginWidget"  
+                  visible="#{cc.attrs.display}" styleClass="noupdate" >                
             <f:facet name="header">  
                 <h:outputText value="#{msgs.loginHeader}"/>  
             </f:facet>                 

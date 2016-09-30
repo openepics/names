@@ -13,14 +13,14 @@
 
             <p:menu id="reqMenu" styleClass="fixedPosition box"  style="width: 8%" >
                 <p:submenu label="Publish">                                          
-                    <p:menuitem value="Publish" icon="ui-icon-plus" oncomplete="addRelease.show()" title="Release a new version"  />                                                         
+                    <p:menuitem value="Publish" icon="ui-icon-plus" oncomplete="PF('addRelease').show()" title="Release a new version"  />                                                         
                     <p:menuitem value="Delete" icon="ui-icon-trash" title="Delete Release" disabled="true"/>                      
                     <p:menuitem value="Modify" icon="ui-icon-pencil" title="Modify Release" disabled="true"/>                                           
                 </p:submenu>
             </p:menu>
 
             <p:contextMenu id="cntxtMenu" for="releaseTable">
-                <p:menuitem value="Add" icon="ui-icon-plus"  oncomplete="addRelease.show()" />                
+                <p:menuitem value="Add" icon="ui-icon-plus"  oncomplete="PF('addRelease').show()" />                
                 <p:menuitem value="Delete"  icon="ui-icon-trash"   disabled="true"/>                
                 <p:menuitem value="Modify"  icon="ui-icon-pencil"  disabled="true"/> 
             </p:contextMenu>
@@ -87,10 +87,10 @@
 
                 <p:commandButton value="Submit" style="float: left"
                                  update=":publishForm"                               
-                                 oncomplete="addRelease.hide()"  
+                                 oncomplete="PF('addRelease').hide()"  
                                  action="#{publicationManager.onAdd()}"/> 
                 <p:commandButton  value="Cancel" style="float: right"
-                                  onclick="addRelease.hide()"  />  
+                                  onclick="PF('addRelease').hide()"  />  
             </p:dialog> 
         </h:form>
 
